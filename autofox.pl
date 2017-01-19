@@ -3,7 +3,7 @@
 # AutoFox 2.5
 
 # Copyright (c) 2003-2008 Nicholas "Tegeran" Knight <nknight@runawaynet.com>
-# Copyright (c) 2003-2008 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
+# Copyright (c) 2003-2016 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
 # 
 # All rights reserved.
 #
@@ -42,10 +42,9 @@ use strict;
 use warnings;
 use File::Copy;
 use POSIX;
-#use local::lib;
 use Switch;
 
-my $afversion = "AutoFox 2.5.2-css";
+my $afversion = "AutoFox 2.5.3-css";
 
 #=======================================================================
 # Read in the config file in a totally unsafe and error-prone way. -Teg
@@ -1318,7 +1317,7 @@ sub todays_comics {
 		} else {
 			my $ci = $_;
 			my $caption = defined $captions{$ci} ? $captions{$ci} : "";
-			$comics .= qq(<img src="$url$comicsdir$_" alt="$caption" title="$caption" class="comicimage" />\n<br />\n);
+			$comics .= qq(<img src="/$comicsdir$_" alt="$caption" title="$caption" class="comicimage" />\n<br />\n);
 		}
 	}
 	$comics =~ s/\<br\>\n$//;
@@ -1358,17 +1357,17 @@ sub first_day {
                 if($use_css_navbuttons) {
                         return qq(<div class="navbutton firstbuttonghosted siteimage" alt="This is the first comic"></div>);
                 } elsif( -e ("$sitedir$imagedir$first_day_ghosted")) {
-			return qq(<img src="$url$imagedir$first_day_ghosted" class="firstbuttonghosted" alt="This is the first comic" />);
+			return qq(<img src="/$imagedir$first_day_ghosted" class="firstbuttonghosted" alt="This is the first comic" />);
 		} else {
 			return "";
 		}
 	} else {
                 if($use_css_navbuttons) {
-			return qq(<a href="$url$dailydir$daylist[0].html"><div class="navbutton firstbutton siteimage" alt="First Day"></div></a>);
+			return qq(<a href="/$dailydir$daylist[0].html"><div class="navbutton firstbutton siteimage" alt="First Day"></div></a>);
                 } elsif (-e ("$sitedir$imagedir$first_day")) {
-			return qq(<a href="$url$dailydir$daylist[0].html"><img src="$url$imagedir$first_day" alt="First Day" class="firstbutton" /></a>);
+			return qq(<a href="/$dailydir$daylist[0].html"><img src="/$imagedir$first_day" alt="First Day" class="firstbutton" /></a>);
 		} else {
-			return qq(<a href="$url$dailydir$daylist[0].html" class="firstbutton">First Day</a>);
+			return qq(<a href="/$dailydir$daylist[0].html" class="firstbutton">First Day</a>);
 		}
 	}
 }
@@ -1380,17 +1379,17 @@ sub last_day {
                 if($use_css_navbuttons) {
                         return qq(<div class="navbutton lastbuttonghosted siteimage" alt="This is the most recent comic"></div>);
                 } elsif( -e ("$sitedir$imagedir$last_day_ghosted")) {
-			return qq(<img src="$url$imagedir$last_day_ghosted" class="lastbuttonghosted" alt="This is the most recent comic" />);
+			return qq(<img src="/$imagedir$last_day_ghosted" class="lastbuttonghosted" alt="This is the most recent comic" />);
 		} else {
 			return "";
 		}
 	} else {
                 if($use_css_navbuttons) {
-			return qq(<a href="$url"><div class="navbutton lastbutton siteimage" alt="Last Day"></div></a>);
+			return qq(<a href="/"><div class="navbutton lastbutton siteimage" alt="Last Day"></div></a>);
                 } elsif (-e ("$sitedir$imagedir$last_day")) {
-			return qq(<a href="$url"><img src="$url$imagedir$last_day" class="lastbutton" alt="Last Day" /></a>);
+			return qq(<a href="/"><img src="/$imagedir$last_day" class="lastbutton" alt="Last Day" /></a>);
 		} else {
-			return qq(<a href="$url" class="lastbutton">Last Day</a>);
+			return qq(<a href="/" class="lastbutton">Last Day</a>);
 		}
 	}
 }
@@ -1402,17 +1401,17 @@ sub previous_day {
                 if($use_css_navbuttons) {
                         return qq(<div class="navbutton prevbuttonghosted siteimage" alt="This is the first comic"></div>);
                 } elsif( -e ("$sitedir$imagedir$previous_day_ghosted")) {
-			return qq(<img src="$url$imagedir$previous_day_ghosted" class="prefbuttonghosted" alt="This is the first comic" />);
+			return qq(<img src="/$imagedir$previous_day_ghosted" class="prefbuttonghosted" alt="This is the first comic" />);
 		} else {
 			return "";
 		}
 	} else {
                 if($use_css_navbuttons) {
-			return qq(<a href="$url$dailydir$daylist[$i-1].html"><div class="navbutton prevbutton siteimage" alt="Previous Day"></div></a>);
+			return qq(<a href="/$dailydir$daylist[$i-1].html"><div class="navbutton prevbutton siteimage" alt="Previous Day"></div></a>);
                 } elsif (-e ("$sitedir$imagedir$previous_day")) {
-			return qq(<a href="$url$dailydir$daylist[$i-1].html"><img src="$url$imagedir$previous_day" class="prevbutton" alt="Previous Day" /></a>);
+			return qq(<a href="/$dailydir$daylist[$i-1].html"><img src="/$imagedir$previous_day" class="prevbutton" alt="Previous Day" /></a>);
 		} else {
-			return qq(<a href="$url$dailydir$daylist[$i-1].html" class="prevbutton">Previous Day</a>);
+			return qq(<a href="/$dailydir$daylist[$i-1].html" class="prevbutton">Previous Day</a>);
 		}
 	}
 }
@@ -1425,22 +1424,22 @@ sub next_day {
                 if($use_css_navbuttons) {
 			return qq(<div class="navbutton nextbuttonghosted siteimage" alt="This is the current comic"></div>);
                 } elsif (-e ("$sitedir$imagedir$next_day_ghosted")) {
-			return qq(<img src="$url$imagedir$next_day_ghosted" class="nextbuttonghosted" alt="No Next Day" />);
+			return qq(<img src="/$imagedir$next_day_ghosted" class="nextbuttonghosted" alt="No Next Day" />);
 		} else {
 			return "";
 		}
 	}
 
 	if ($i == ($#daylist - 1)) {
-		$link = $url;
+		$link = "/";
 	} else {
-		$link = "$url$dailydir$daylist[$i+1].html";
+		$link = "/$dailydir$daylist[$i+1].html";
 	}
 
         if($use_css_navbuttons) {
 		return qq(<a href="$link"><div class="navbutton nextbutton siteimage" alt="Next Day"></div></a>);
         } elsif (-e ("$sitedir$imagedir$next_day")) {
-		return qq(<a href="$link"><img src="$url$imagedir$next_day" class="nextbutton" alt="Next Day" /></a>);
+		return qq(<a href="$link"><img src="/$imagedir$next_day" class="nextbutton" alt="Next Day" /></a>);
 	} else {
 		return qq(<a href="$link" class="nextbutton">Next Day</a>);
 	}
@@ -1467,15 +1466,15 @@ sub link_rel {
     my $toreturn = "";
 
     if($i >= 1) {
-        $toreturn .= qq(<link rel="prev" title="Previous comic" href="$url$dailydir$daylist[$i-1].html" />\n);
+        $toreturn .= qq(<link rel="prev" title="Previous comic" href="/$dailydir$daylist[$i-1].html" />\n);
     }
 
     if($i < $#daylist) {
-        $toreturn .= qq(<link rel="next" title="Next comic" href="$url$dailydir$daylist[$i+1].html" />\n);
+        $toreturn .= qq(<link rel="next" title="Next comic" href="/$dailydir$daylist[$i+1].html" />\n);
     }
 
-    $toreturn .= qq(<link rel="start" title="First comic" href="$url$dailydir$daylist[0].html" />\n);
-    $toreturn .= qq(<link rel="index" title="Current comic" href="$url" />\n);
+    $toreturn .= qq(<link rel="start" title="First comic" href="/$dailydir$daylist[0].html" />\n);
+    $toreturn .= qq(<link rel="index" title="Current comic" href="/" />\n);
 
     return $toreturn;
 }
@@ -1485,7 +1484,7 @@ sub daily_archive {
 	my @reversestrips = reverse @daylist;
 	foreach (@reversestrips) {
 		/((\d\d\d\d)(\d\d)(\d\d))/;
-		$line .= qq(<a href="$url$dailydir$1.html">$mshortnames[$3] $4, $2</a><br />\n);
+		$line .= qq(<a href="/$dailydir$1.html">$mshortnames[$3] $4, $2</a><br />\n);
 	}
 	return $line;
 }
@@ -1612,7 +1611,7 @@ sub calendar {
 	
 	if ($prevmonth) {
 		$line .= qq(<span class="calendarmonthnav">);
-		$line .= qq(<a href="$url$dailydir$prevmonth.html">$pmname</a>);
+		$line .= qq(<a href="/$dailydir$prevmonth.html">$pmname</a>);
                 $line .= qq(</span>);
 	}
 	
@@ -1620,7 +1619,7 @@ sub calendar {
 
 	if ($nextmonth) {
 		$line .= qq(<span class="calendarmonthnav">);
-		$line .= qq(<a href="$url$dailydir$nextmonth.html">$nmname</a>);
+		$line .= qq(<a href="/$dailydir$nextmonth.html">$nmname</a>);
 		$line .= qq(</span>);
 	}
 	
@@ -1654,7 +1653,7 @@ sub calendar {
 			my $pday = getndays($pyear, $pmonth)-$pscount; $pscount--;
 			
 			if ($dayhasstrip{$pyear}[$pmonth][$pday]) {
-				$line .= qq(<td class="calendarprevmonthday"><a href="$url$dailydir$pyear$pmonth$pday.html">$pday</a></td>);
+				$line .= qq(<td class="calendarprevmonthday"><a href="/$dailydir$pyear$pmonth$pday.html">$pday</a></td>);
 			} else {
 				$line .= qq(<td class="calendarprevmonthday">$pday</td>);
 			}
@@ -1669,9 +1668,9 @@ sub calendar {
 			if ($dayhasstrip{$year}[$month][$today]) {
 				if ("$year$month$today" eq $fulldate and !$bigcal) {
                                     # Cell is, in fact, TODAY.
-					$line .= qq(<td class="calendardaywithcomic calendartoday"><a href="$url$dailydir$year$month$today.html">$dtoday</a></td>);
+					$line .= qq(<td class="calendardaywithcomic calendartoday"><a href="/$dailydir$year$month$today.html">$dtoday</a></td>);
 				} else {
-					$line .= qq(<td class="calendardaywithcomic"><a href="$url$dailydir$year$month$today.html">$dtoday</a></td>);
+					$line .= qq(<td class="calendardaywithcomic"><a href="/$dailydir$year$month$today.html">$dtoday</a></td>);
 				}
 			} else {
 				$line .= qq(<td>$dtoday</td>);
@@ -1696,7 +1695,7 @@ sub calendar {
 		if ($dayhasstrip{$pyear}[$pmonth][$pday]) {
 			my $pdday = $pday;
 			fdn($pday);
-			$line .= qq(<td class="calendarnextmonthday"><a href="$url$dailydir$pyear$pmonth$pday.html">$pdday</a></td>);
+			$line .= qq(<td class="calendarnextmonthday"><a href="/$dailydir$pyear$pmonth$pday.html">$pdday</a></td>);
 		} else {
 			$line .= qq(<td class="calendarnextmonthday">$pday</td>);
 		}
