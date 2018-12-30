@@ -379,8 +379,7 @@ if ($conf{updateday} eq "previous") {
 
 foreach (<$workdir/$uploaddir/*>) {
 	if (/(\d{8})/ and $1 <= $curdate) {
-		move($_, "$sitedir$comicsdir");
-		aflog("moved $_ to $sitedir$comicsdir")
+		move($_, "$sitedir$comicsdir") ? aflog("moved $_ to $sitedir$comicsdir") : aflog("FAILED TO MOVE $_ TO $sitedir$comicsdir: $!");
 	}
 }
 
