@@ -3,7 +3,7 @@
 # AutoFox 2.5
 
 # Copyright (c) 2003-2008 Nicholas "Tegeran" Knight <nknight@runawaynet.com>
-# Copyright (c) 2003-2008 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
+# Copyright (c) 2003-2018 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
 # See "LICENSE" file at the toplevel for your daily dose of 3-clause BSD.
 
 # This is 1800-ish lines of semi-(readable|maintainable) Perl. It ain't pretty,
@@ -21,7 +21,7 @@ use POSIX;
 #use local::lib;
 use Switch;
 
-my $afversion = "AutoFox 2.5.2-css";
+my $afversion = "AutoFox 2.5.4-css";
 
 #=======================================================================
 # Read in the config file in a totally unsafe and error-prone way. -Teg
@@ -145,6 +145,7 @@ my $rss_copyright = $conf{rss_copyright};
 
 foreach ($sitedir, $workdir) {
 	$_ = "$basedir$_" unless /^\//;
+	$_ = "$_/" unless /\/$/;
 }
 
 while (my ($key, $val) = each %conf) {
@@ -249,6 +250,55 @@ chdir($basedir);
 
 
 aflog("AutoFox $afversion running for $url...");
+
+# Let's do some directory sanity checking first!
+sub checkdirectoryexists($$) {
+    my $varname = shift;
+    my $dir = shift;
+    (-d $dir) or affatal("$varname ($dir) isn't a directory!");
+}
+
+sub checkdirectoryread($$) {
+    my $varname = shift;
+    my $dir = shift;
+    checkdirectoryexists($varname, $dir);
+    (-r $dir) or affatal("$varname ($dir) isn't readable!");
+}
+
+sub checkdirectoryreadwrite($$) {
+    my $varname = shift;
+    my $dir = shift;
+    checkdirectoryread($varname, $dir);
+    (-w $dir) or affatal("$varname ($dir) isn't writeable!");
+}
+# basedir needs to be there, first of all.  It doesn't need to be EXPLICITLY
+# readable or writeable; those checks come implicitly with other directories.
+checkdirectoryexists("basedir", $basedir);
+
+# workdir, similarly, doesn't really need to be readable on its own.
+checkdirectoryexists("workdir", $workdir);
+
+# sitedir, however, DOES need to be explicitly writeable.  That's where we're
+# going to dump the final products, after all.
+checkdirectoryreadwrite("sitedir", $sitedir);
+
+# uploaddir and comicsdir need to be writeable (the former to remove comics, the
+# latter to add them in).
+checkdirectoryreadwrite("comicsdir", $sitedir . $comicsdir);
+checkdirectoryreadwrite("uploaddir", $workdir . $uploaddir);
+
+# dailydir also needs to be writeable (that's where the archive is built up).
+checkdirectoryreadwrite("dailydir", $sitedir . $dailydir);
+
+# imagedir, parsedir, and datadir only need read access.  Those just contain
+# image filenames (for URLs), templates (for building the site), and data files
+# (for other parsing bits).
+checkdirectoryread("imagedir", $sitedir . $imagedir);
+checkdirectoryread("parsedir", $workdir . $parsedir);
+checkdirectoryread("datadir", $workdir . $datadir);
+
+aflog("Using $sitedir as the site directory...");
+aflog("Using $workdir as the workspace directory...");
 
 #=======================================================================
 # Time zone hackery.  Do you know how many time zones there are in the
