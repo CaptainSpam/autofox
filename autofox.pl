@@ -6,7 +6,7 @@
 # Copyright (c) 2003-2018 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
 # See "LICENSE" file at the toplevel for your daily dose of 3-clause BSD.
 
-# This is 1800-ish lines of semi-(readable|maintainable) Perl. It ain't pretty,
+# This is 2000-ish lines of semi-(readable|maintainable) Perl. It ain't pretty,
 # but by some miracle it works, and it's surprisingly fast.
 
 # It might be possible to clean AutoFox up quite a bit by using more of the
@@ -30,13 +30,13 @@ my $afversion = "AutoFox 2.5.4-css";
 # optimize Perl code like that ;)). -Teg
 
 my @mnames = ("Error", "January", "February", "March", "April", "May", "June",
-	"July", "August", "September", "October", "November", "December");
+    "July", "August", "September", "October", "November", "December");
 
 my @mshortnames = ("Error", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-	"Aug", "Sep", "Oct", "Nov", "Dec");
+    "Aug", "Sep", "Oct", "Nov", "Dec");
 
 my @dnames = ("Error", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-	"Friday", "Saturday");
+    "Friday", "Saturday");
 
 my @dshortnames = ("Error", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 
@@ -44,76 +44,76 @@ my @dshortnames = ("Error", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 # Read in the config file in a totally unsafe and error-prone way. -Teg
 
 my %conf = (
-	url			=>	"about:blank",
-	updatetime	=>	2300,
-	updateday	=>	"same",
-    timezone    =>  strftime("%z",localtime),
-	captionold	=>	1,
-	captionsfile	=>	"captions.txt",
-	comicsdir	=>	"comics/",
-	imagedir	=>	"images/",
-	dailydir	=>	"d/",
-	uploaddir	=>	"comics/",
-	sitedir		=>	"public_html/",
-	workdir		=>	"workspace/",
-	parsedir	=>	"pages/",
-	datadir		=>	"data/",
-	storyfile	=>	"storyline.txt",
-	logfile		=>	"autofox.log",
-	indexfile	=>	"index.html",
-	storylinebanners	=>	"storylinebanners.txt",
-	dailyext	=>	".html",
-        use_css_navbuttons      =>      0,
-	last_day	=>	"",
-	first_day	=>	"",
-	previous_day	=>	"",
-	next_day	=>	"",
-	last_day_ghosted	=>	"",
-	first_day_ghosted	=>	"",
-	previous_day_ghosted	=>	"",
-	next_day_ghosted	=>	"",
-	storystart	=>	"storystart.gif",
-	dailytemplate => "dailytemplate.html",
-	js_prefix => "af_",
-	storyline_use_date	=>	0,
-	storyline_use_javascript	=>	1,
+    url                     =>      "about:blank",
+    updatetime              =>      2300,
+    updateday               =>      "same",
+    timezone                =>      strftime("%z",localtime),
+    captionold              =>      1,
+    captionsfile            =>      "captions.txt",
+    comicsdir               =>      "comics/",
+    imagedir                =>      "images/",
+    dailydir                =>      "d/",
+    uploaddir               =>      "comics/",
+    sitedir                 =>      "public_html/",
+    workdir                 =>      "workspace/",
+    parsedir                =>      "pages/",
+    datadir                 =>      "data/",
+    storyfile               =>      "storyline.txt",
+    logfile                 =>      "autofox.log",
+    indexfile               =>      "index.html",
+    storylinebanners        =>      "storylinebanners.txt",
+    dailyext                =>      ".html",
+    use_css_navbuttons      =>      0,
+    last_day                =>      "",
+    first_day               =>      "",
+    previous_day            =>      "",
+    next_day                =>      "",
+    last_day_ghosted        =>      "",
+    first_day_ghosted       =>      "",
+    previous_day_ghosted    =>      "",
+    next_day_ghosted        =>      "",
+    storystart              =>      "storystart.gif",
+    dailytemplate           =>      "dailytemplate.html",
+    js_prefix               =>      "af_",
+    storyline_use_date      =>      0,
+    storyline_use_javascript    =>      1,
 # Plain is unused for now
-	storyline_use_plain	=>	1,
-	bigcalwidth => 3,
-	ddredirect => "",
-	calbacka	=> "#d0d0d0",
-	calbackb	=> "#b0b0b0",
-	calhighlight	=> "#ffffff",
-	calnolink	=> "#000000",
+    storyline_use_plain     =>      1,
+    bigcalwidth             =>      3,
+    ddredirect              =>      "",
+    calbacka                =>      "#d0d0d0",
+    calbackb                =>      "#b0b0b0",
+    calhighlight            =>      "#ffffff",
+    calnolink               =>      "#000000",
 # The RSS options
 # Base functionality
-	rss_full_generate	=>	0,
-	rss_full_filename	=>	"comicfeed.rdf",
-	rss_lite_generate	=>	0,
-	rss_lite_filename	=>	"comicfeedlite.rdf",
-	rss_limit	=>	10,
+    rss_full_generate       =>      0,
+    rss_full_filename       =>      "comicfeed.rdf",
+    rss_lite_generate       =>      0,
+    rss_lite_filename       =>      "comicfeedlite.rdf",
+    rss_limit               =>      10,
 # Customization
-	rss_title	=>	"DEFAULT TITLE",
-	rss_link	=>	"http://localhost/",
-	rss_description	=>	"Edit this in autofox.cfg!",
-	rss_copyright	=>	"Copyright sometime... by someone... doing something"
+    rss_title               =>      "DEFAULT TITLE",
+    rss_link                =>      "http://localhost/",
+    rss_description         =>      "Edit this in autofox.cfg!",
+    rss_copyright           =>      "Copyright sometime... by someone... doing something"
 ### I want RSS image support later, but not right now.
 );
 
 my $config = "autofox.cfg";
 
 if (defined $ARGV[0]) {
-	$config = $ARGV[0];
+    $config = $ARGV[0];
 }
 
 open CONFIG, $config or die "Exiting: Can't open configuration file '$config'. $!\n";
 
 while (<CONFIG>) {
-	chomp;
-	next if /^#/; next if /^\s*$/;
-	s/\s*$//;
-	/(\S*)\s*=\s*(.*)/;
-	$conf{$1} = $2;
+    chomp;
+    next if /^#/; next if /^\s*$/;
+    s/\s*$//;
+    /(\S*)\s*=\s*(.*)/;
+    $conf{$1} = $2;
 }
 
 close CONFIG;
@@ -135,9 +135,9 @@ my $calnolink = $conf{calnolink};
 # a whole lot of difference... -Teg
 
 while (my ($key, $val) = each %conf) {
-	if ($key =~ /dir$/ and $val !~ /\/$/) {
-		$conf{$key} .= "/"
-	}
+    if ($key =~ /dir$/ and $val !~ /\/$/) {
+        $conf{$key} .= "/"
+    }
 }
 
 my $basedir = $conf{basedir};
@@ -169,8 +169,8 @@ $basedir = "$basedir/" unless $basedir =~ /\/$/;
 # Both sitedir and workdir CAN refer to absolute locations, if they start with a
 # forward slash.  If not, they get basedir stapled onto the front of them.
 foreach ($sitedir, $workdir) {
-	$_ = "$basedir$_" unless /^\//;
-	$_ = "$_/" unless /\/$/;
+    $_ = "$basedir$_" unless /^\//;
+    $_ = "$_/" unless /\/$/;
 }
 
 # All other dirs should also end in a slash.  Starting with a slash is
@@ -182,12 +182,12 @@ foreach ($dailydir, $imagedir, $comicsdir, $workdir, $parsedir, $datadir, $uploa
 }
 
 while (my ($key, $val) = each %conf) {
-	if ($key =~ /(?:_day$|^storystart$)/ and $val =~ /^$/) {
-		foreach my $fn (<$sitedir$imagedir$key.*>) {
-			$conf{$key} = "$fn";
-			last if $fn =~ /\.png$/; # Favouristic fiat.
-		}
-	}
+    if ($key =~ /(?:_day$|^storystart$)/ and $val =~ /^$/) {
+        foreach my $fn (<$sitedir$imagedir$key.*>) {
+            $conf{$key} = "$fn";
+            last if $fn =~ /\.png$/; # Favouristic fiat.
+        }
+    }
 }
 
 my $storyfile = $conf{storyfile};
@@ -195,7 +195,7 @@ my $dailytemplate = $conf{dailytemplate};
 my $dailyext = $conf{dailyext};
 
 my ($updatehour, $updatemin) =
-	($conf{updatetime} =~ /(\d\d).*(\d\d)/);
+    ($conf{updatetime} =~ /(\d\d).*(\d\d)/);
 
 my $timezone = $conf{timezone};
 
@@ -332,17 +332,17 @@ my $servertimezone = strftime("%z",localtime);
 # If this turns out to be a bogus format, we default it to the server's time
 # zone.
 if($timezone =~ /^(\+|\-)/) {
-	$timezone =~ /^(\+|\-)(\d\d\d\d|\d\d\d)/;
-	my $temp = $1 . $2;
-	# Basic sanity check
-	if($temp < -1200 or $temp > 1200 or abs($temp) % 100 >= 60) {
-		aflog("Config error: timezone is not valid (needs to be in the +/-XXXX hours format), reverting to system time zone...");
-		$timezone = $servertimezone;
-	}
-	# If the format matches, then $timezone is set properly.  Done!
+    $timezone =~ /^(\+|\-)(\d\d\d\d|\d\d\d)/;
+    my $temp = $1 . $2;
+    # Basic sanity check
+    if($temp < -1200 or $temp > 1200 or abs($temp) % 100 >= 60) {
+        aflog("Config error: timezone is not valid (needs to be in the +/-XXXX hours format), reverting to system time zone...");
+        $timezone = $servertimezone;
+    }
+    # If the format matches, then $timezone is set properly.  Done!
 } else {
-	aflog("Config error: timezone is not valid (needs to be in the +/-XXXX hours format), reverting to system time zone...");
-	$timezone = $servertimezone;
+    aflog("Config error: timezone is not valid (needs to be in the +/-XXXX hours format), reverting to system time zone...");
+    $timezone = $servertimezone;
 }
 
 #=======================================================================
@@ -358,10 +358,10 @@ my $curdate;
 # "braindead".
 my $tzoffset;
 {
-	my $houroffset = (int ($timezone / 100)) * 3600;
-	my $minuteoffset = (abs($timezone) % 100) * 60;
-	if($timezone < 0) { $minuteoffset *= -1 };
-	$tzoffset = $houroffset + $minuteoffset;
+    my $houroffset = (int ($timezone / 100)) * 3600;
+    my $minuteoffset = (abs($timezone) % 100) * 60;
+    if($timezone < 0) { $minuteoffset *= -1 };
+    $tzoffset = $houroffset + $minuteoffset;
 }
 
 # Right here, we get $curdate set.  For the purposes of execution, $curdate
@@ -370,35 +370,35 @@ my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime(time + $tzoffse
 $mon++;
 $year += 1900;
 if ($conf{updateday} eq "previous") {
-	if ($hour > $updatehour || ($hour == $updatehour && $min >= $updatemin)) {
-		my $mmon = $mon+1;
-		my $mmday = $mday+1;
-		fdn($mon, $mmon, $mmday);
-		if ($mday == getndays($year, $mon)) {
-			$curdate = $year . $mmon . "01";
-		} else {
-			$curdate = $year . $mon . $mmday;
-		}
-	} else {
-		fdn($mon, $mday);
-		$curdate = $year . $mon . $mday;
-	}
+    if ($hour > $updatehour || ($hour == $updatehour && $min >= $updatemin)) {
+        my $mmon = $mon+1;
+        my $mmday = $mday+1;
+        fdn($mon, $mmon, $mmday);
+        if ($mday == getndays($year, $mon)) {
+            $curdate = $year . $mmon . "01";
+        } else {
+            $curdate = $year . $mon . $mmday;
+        }
+    } else {
+        fdn($mon, $mday);
+        $curdate = $year . $mon . $mday;
+    }
 } elsif ($updateday eq "same") {
-	my $mmday = $mday-1;
-	fdn($mmday, $mon, $mday);
-	if ($hour > $updatehour || ($hour == $updatehour && $min >= $updatemin)) {
-		$curdate = $year . $mon . $mday;
-	} else {
-		$curdate = $year . $mon . $mmday;
-	}
+    my $mmday = $mday-1;
+    fdn($mmday, $mon, $mday);
+    if ($hour > $updatehour || ($hour == $updatehour && $min >= $updatemin)) {
+        $curdate = $year . $mon . $mday;
+    } else {
+        $curdate = $year . $mon . $mmday;
+    }
 } else {
-	affatal("Invalid value for 'updateday', must be either 'previous' or 'same'. Check the docs again.");
+    affatal("Invalid value for 'updateday', must be either 'previous' or 'same'. Check the docs again.");
 }
 
 foreach (<$workdir/$uploaddir/*>) {
-	if (/(\d{8})/ and $1 <= $curdate) {
-		move($_, "$sitedir$comicsdir") ? aflog("moved $_ to $sitedir$comicsdir") : aflog("FAILED TO MOVE $_ TO $sitedir$comicsdir: $!");
-	}
+    if (/(\d{8})/ and $1 <= $curdate) {
+        move($_, "$sitedir$comicsdir") ? aflog("moved $_ to $sitedir$comicsdir") : aflog("FAILED TO MOVE $_ TO $sitedir$comicsdir: $!");
+    }
 }
 
 #=======================================================================
@@ -407,20 +407,20 @@ foreach (<$workdir/$uploaddir/*>) {
 
 my @sdrop;
 if (open SDROP, "$workdir$datadir$storyfile") {
-	@sdrop = <SDROP>;
-	close SDROP;
+    @sdrop = <SDROP>;
+    close SDROP;
 }
 
 my %storylinebanners;
 
 if (open STORYBANNERS, "$workdir$datadir$storylinebanners") {
-	while (<STORYBANNERS>) {
-		next if /^$|^\s*#/;
-		my ($name, $url) = /(.*?),(?!.*")(.*?)(?:\r|\n)/;
-		$name =~ s/^"(.*?)"$/$1/;
-		$storylinebanners{$name} = $url;
-	}
-	close STORYBANNERS;
+    while (<STORYBANNERS>) {
+        next if /^$|^\s*#/;
+        my ($name, $url) = /(.*?),(?!.*")(.*?)(?:\r|\n)/;
+        $name =~ s/^"(.*?)"$/$1/;
+        $storylinebanners{$name} = $url;
+    }
+    close STORYBANNERS;
 }
 
 # The storyline preparser.
@@ -440,74 +440,74 @@ if (open STORYBANNERS, "$workdir$datadir$storylinebanners") {
 
 my @stories;
 {
-	my $index = 0;
-	foreach (@sdrop) {
-		next if /^$|^\s*#/;
-		my ($name, $path, $date) = /(.*?)\s*,\s*(?!.*")(.*?)(?:\s*,\s*(.*?))?(?:\r\n|\r|\n)/;
+    my $index = 0;
+    foreach (@sdrop) {
+        next if /^$|^\s*#/;
+        my ($name, $path, $date) = /(.*?)\s*,\s*(?!.*")(.*?)(?:\s*,\s*(.*?))?(?:\r\n|\r|\n)/;
 
-		# Catch quotes
-		$name =~ s/^(\s*)"(.*?)"$/$1$2/;
-		my ($cname) = ($name =~ /^\s*(.*)/); # "c"lean name
+        # Catch quotes
+        $name =~ s/^(\s*)"(.*?)"$/$1$2/;
+        my ($cname) = ($name =~ /^\s*(.*)/); # "c"lean name
 
-		# Any space that PRECEDES the name of a storyline (i.e.
-		# collapseable level indicators) are replaced by a
-		# DOUBLE &nbsp;.
+        # Any space that PRECEDES the name of a storyline (i.e.
+        # collapseable level indicators) are replaced by a
+        # DOUBLE &nbsp;.
 
-		my ($tempspaces) = ($name =~ /^( *)/);
-		my $depth = length $tempspaces;
-		$tempspaces =~ s/ /&nbsp;&nbsp;/g;
-		$name =~ s/^( *)/$tempspaces/;
+        my ($tempspaces) = ($name =~ /^( *)/);
+        my $depth = length $tempspaces;
+        $tempspaces =~ s/ /&nbsp;&nbsp;/g;
+        $name =~ s/^( *)/$tempspaces/;
 
-		# Compatibility with Keenspace: Knock out leading @ symbol
-		# (don't ask, I don't get why they made it so you need an @ to make an
-		# external URL)
-		$path =~ s/^\@//;
+        # Compatibility with Keenspace: Knock out leading @ symbol
+        # (don't ask, I don't get why they made it so you need an @ to make an
+        # external URL)
+        $path =~ s/^\@//;
 
-		# Make date in yyyymmdd format
-		my $pdate;
-		if (defined($date)) {
-			# Hi.  Undocumented bit.  The $storyline_use_date variable
-			# determines whether to use the actual date field (true) or
-			# Keenspace-like interpretation (false, default).
-			#
-			# I actually think it ought to be documented. I was also
-			# thinking about reversing it to make the AutoKeen behaviour
-			# the non-default. -Teg
-			my ($mon,$day,$year);
-			
-			if ($storyline_use_date) {
+        # Make date in yyyymmdd format
+        my $pdate;
+        if (defined($date)) {
+            # Hi.  Undocumented bit.  The $storyline_use_date variable
+            # determines whether to use the actual date field (true) or
+            # Keenspace-like interpretation (false, default).
+            #
+            # I actually think it ought to be documented. I was also
+            # thinking about reversing it to make the AutoKeen behaviour
+            # the non-default. -Teg
+            my ($mon,$day,$year);
 
-				# This way, people can use either YYYYMMDD or MM/DD/YYYY. I'm
-				# also going to add a config option to switch between American
-				# and standard XX/XX/YYYY formats, I think. -Teg
-				if ($date =~ /\//) {
-					($mon, $day, $year) = ($date =~ /(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d)/);
-					fdn($mon, $day);
-					# Now, catch two-digit years, Y2K be damned!
-					if($year < 100) {
-						# I figure 1981 is safe enough as a lower bound
-						# of two-digit dates.  And coders of yore figured
-						# two-digit dates were safe bounds, too.
-						if($year >= 80 and $year <= 99) {
-							$year += 1900;
-						} else {
-							$year += 2000;
-						}
-					}
-					$date = "$year$mon$day";
-				} else {
-					# Sanity check of the weakest order.
-					($date) = ($date =~ /(\d{8})/);
-				}
-			} else {
-				($date) = ($path =~ /(\d{8})/);
-			}
-		} elsif ($path =~ /(\d{8})/) {
-			# Magic bit to make SELECTED work on storylines with no date field.
-			# See poorly-formatted code in storylinesubcheck() for rest of magic.
-			# -Teg
-			$pdate = $1;
-		}
+            if ($storyline_use_date) {
+
+                # This way, people can use either YYYYMMDD or MM/DD/YYYY. I'm
+                # also going to add a config option to switch between American
+                # and standard XX/XX/YYYY formats, I think. -Teg
+                if ($date =~ /\//) {
+                    ($mon, $day, $year) = ($date =~ /(\d\d|\d)\/(\d\d|\d)\/(\d\d\d\d|\d\d)/);
+                    fdn($mon, $day);
+                    # Now, catch two-digit years, Y2K be damned!
+                    if($year < 100) {
+                        # I figure 1981 is safe enough as a lower bound
+                        # of two-digit dates.  And coders of yore figured
+                        # two-digit dates were safe bounds, too.
+                        if($year >= 80 and $year <= 99) {
+                            $year += 1900;
+                        } else {
+                            $year += 2000;
+                        }
+                    }
+                    $date = "$year$mon$day";
+                } else {
+                    # Sanity check of the weakest order.
+                    ($date) = ($date =~ /(\d{8})/);
+                }
+            } else {
+                ($date) = ($path =~ /(\d{8})/);
+            }
+        } elsif ($path =~ /(\d{8})/) {
+            # Magic bit to make SELECTED work on storylines with no date field.
+            # See poorly-formatted code in storylinesubcheck() for rest of magic.
+            # -Teg
+            $pdate = $1;
+        }
 
                 # At this point, we have either $date or $pdate, I think.  If
                 # either are beyond the current date, we ignore this entry, as
@@ -515,19 +515,19 @@ my @stories;
                 # file.
                 next if((defined($date) and $date > $curdate) or (defined($pdate) and $pdate > $curdate));
 
-		my $banner = exists $storylinebanners{$cname} ? $storylinebanners{$cname} : '';
+        my $banner = exists $storylinebanners{$cname} ? $storylinebanners{$cname} : '';
 
-		# Now throw it all together
-		$stories[$index++] = {
-				name => $name,
-				cname => $cname,
-				path => $path,
-				date => $date,
-				pdate => $pdate,
-				banner => $banner,
-				depth => $depth
-			}
-	}
+        # Now throw it all together
+        $stories[$index++] = {
+                name => $name,
+                cname => $cname,
+                path => $path,
+                date => $date,
+                pdate => $pdate,
+                banner => $banner,
+                depth => $depth
+            }
+    }
 }
 
 # The stories array is made.  That's done, at least.
@@ -543,22 +543,22 @@ my @stories;
 
 my @subordinate;
 for(my $i = 0; $i <= $#stories; $i++) {
-	# Starting with the first story, we check anything after it to make an
-	# array of what's underneath each story.  Really.
-	$subordinate[$i] = 0;
+    # Starting with the first story, we check anything after it to make an
+    # array of what's underneath each story.  Really.
+    $subordinate[$i] = 0;
 
-	my $startdepth = $stories[$i]->{depth};
-	for(my $j = ($i + 1); $j <= $#stories; $j++) {
-		# ASSUMPTION: We only go down one depth at a time!
-		# (I think it would be paradoxial to go down more than one at a time; I can't
-		# even begin to imagine how it might be defined. -Teg)
-		# If this is directly subordinate, add it to the fray.
-		$subordinate[$i] = 1 if ($stories[$j]->{depth} == ($startdepth + 1));
-		# If this is more than one level subordinate, skip it.
-		next if($stories[$j]->{depth} > ($startdepth + 1));
-		# If this is equal or higher, terminate the loop.
-		last if($stories[$j]->{depth} <= $startdepth);
-	}
+    my $startdepth = $stories[$i]->{depth};
+    for(my $j = ($i + 1); $j <= $#stories; $j++) {
+        # ASSUMPTION: We only go down one depth at a time!
+        # (I think it would be paradoxial to go down more than one at a time; I can't
+        # even begin to imagine how it might be defined. -Teg)
+        # If this is directly subordinate, add it to the fray.
+        $subordinate[$i] = 1 if ($stories[$j]->{depth} == ($startdepth + 1));
+        # If this is more than one level subordinate, skip it.
+        next if($stories[$j]->{depth} > ($startdepth + 1));
+        # If this is equal or higher, terminate the loop.
+        last if($stories[$j]->{depth} <= $startdepth);
+    }
 }
 
 # The big block of storyline subroutines.  If given the time to reorganize
@@ -573,85 +573,83 @@ for(my $i = 0; $i <= $#stories; $i++) {
 # relies on us not screwing up in calling it. ;) -Teg
 
 sub storyline {
-	my $fulldate = shift;
-	my $line;
-	my @remainingstories;
-	my $selected = 0;
-	my $no_this_is_cgi = 0;
+    my $fulldate = shift;
+    my $line;
+    my @remainingstories;
+    my $selected = 0;
+    my $no_this_is_cgi = 0;
 
-	# If this is Javascripty AND the headers have been called,
-	# set it up as a Javascripty bit.  Otherwise, fall to CGI.
-	### FIXME: The CGI interface uses "dropdown" as the parameter name,
-	### but the Javascript one uses "page".
-	if($storyline_use_javascript) {
-		# Error checking
-		if($headers_placed and !$js_story_placed) {
-			$line = qq(<select name="$js_prefix).qq(story">\n);
-		} else {
-			if(!$headers_placed) {
-				$line = "ERROR: Config says we want the Javascript dropdown, but the Javascript header hasn't been declared for this page yet!  Defaulting to CGI dropdown...<br>\n";
-				$line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
-				$no_this_is_cgi = 1;
-			}
-			if($js_story_placed) {
-				$line = "ERROR: Config says we want the Javascript dropdown, but it's already been used on this page!  Ignoring this tag to avoid Javascript namespace collisions...<br>\n";
-				return $line;
-			}
-		}
-	} else {
-		# If it's not set at all, we can safely assume CGI.
-		$line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
-	}
+    # If this is Javascripty AND the headers have been called,
+    # set it up as a Javascripty bit.  Otherwise, fall to CGI.
+    ### FIXME: The CGI interface uses "dropdown" as the parameter name,
+    ### but the Javascript one uses "page".
+    if($storyline_use_javascript) {
+        # Error checking
+        if($headers_placed and !$js_story_placed) {
+            $line = qq(<select name="$js_prefix).qq(story">\n);
+        } else {
+            if(!$headers_placed) {
+                $line = "ERROR: Config says we want the Javascript dropdown, but the Javascript header hasn't been declared for this page yet!  Defaulting to CGI dropdown...<br>\n";
+                $line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
+                $no_this_is_cgi = 1;
+            }
+            if($js_story_placed) {
+                $line = "ERROR: Config says we want the Javascript dropdown, but it's already been used on this page!  Ignoring this tag to avoid Javascript namespace collisions...<br>\n";
+                return $line;
+            }
+        }
+    } else {
+        # If it's not set at all, we can safely assume CGI.
+        $line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
+    }
 
-	# One recurse later, we'll be in business.
-	$selected = storylinesubcheck(0,$fulldate,\@remainingstories);
+    # One recurse later, we'll be in business.
+    $selected = storylinesubcheck(0,$fulldate,\@remainingstories);
 
-	# We now have @remainingstories!  And the crowd goes wild.
-	# We also have $selected, so we know what's selected.  Booyaa!
+    # We now have @remainingstories!  And the crowd goes wild.
+    # We also have $selected, so we know what's selected.  Booyaa!
 
-	for (my $i = 0; $i <= $#remainingstories; $i++) {
-		my $link;
-		my $selectedtext;
+    for (my $i = 0; $i <= $#remainingstories; $i++) {
+        my $link;
+        my $selectedtext;
 
-		if ($remainingstories[$i]->{path} eq "NULL" or $remainingstories[$i]->{path} eq "") {
-			$link = "NULL";
-		} elsif ($remainingstories[$i]->{path} =~ /^http\:\/\//) {
-			$link = $remainingstories[$i]->{path};
-		} else {
-			$link = $url.$remainingstories[$i]->{path};
-		}
+        if ($remainingstories[$i]->{path} eq "NULL" or $remainingstories[$i]->{path} eq "") {
+            $link = "NULL";
+        } elsif ($remainingstories[$i]->{path} =~ /^http\:\/\//) {
+            $link = $remainingstories[$i]->{path};
+        } else {
+            $link = $url.$remainingstories[$i]->{path};
+        }
 
-		# Hey!  Catch initial double-slashes!
-		# Smallish problem if the URL ends with a slash and the storyline
-		# URL starts with a slash... realistically, it doesn't matter in a
-		# practical sense (any sane webserver should know what to do with it),
-		# but it looks ugly.  So there.
+        # Hey!  Catch initial double-slashes!
+        # Smallish problem if the URL ends with a slash and the storyline
+        # URL starts with a slash... realistically, it doesn't matter in a
+        # practical sense (any sane webserver should know what to do with it),
+        # but it looks ugly.  So there.
 
-		$link =~ s/^(http\:\/\/(.*?)\/)\//$1/;
+        $link =~ s/^(http\:\/\/(.*?)\/)\//$1/;
 
-		if ($i == $selected) {
-			$selectedtext = qq( selected="selected");
-		} else {
-			$selectedtext = "";
-		}
-		
-		# A NULL entry is disabled.  Unclickable.  Ignored by the Javascripty bit.
-		# So what if IE doesn't seem to treat this right?  Screw 'em.  Serves 'em
-		# right for ignoring standards and stagnating their browser.
-		if ($link eq "NULL" or $link eq "") {
-			$selectedtext .= qq( disabled="disabled");
-		}
+        if ($i == $selected) {
+            $selectedtext = qq( selected="selected");
+        } else {
+            $selectedtext = "";
+        }
 
-		$line .= qq(<option value="$link"$selectedtext>$remainingstories[$i]->{name}</option>\n);
-	}
+        # A NULL entry is disabled.  Unclickable.  Ignored by the Javascripty bit.
+        if ($link eq "NULL" or $link eq "") {
+            $selectedtext .= qq( disabled="disabled");
+        }
 
-	if($storyline_use_javascript and !$no_this_is_cgi) {
-		$line .= qq(</select>&nbsp;<input type="button" value="Go!" onclick=").$js_prefix.qq(story_go();" />\n);
-	} else {
-		$line .= qq(</select>&nbsp;<input type="submit" value="Go!" /></form>\n);
-	}
+        $line .= qq(<option value="$link"$selectedtext>$remainingstories[$i]->{name}</option>\n);
+    }
 
-	return $line;
+    if($storyline_use_javascript and !$no_this_is_cgi) {
+        $line .= qq(</select>&nbsp;<input type="button" value="Go!" onclick=").$js_prefix.qq(story_go();" />\n);
+    } else {
+        $line .= qq(</select>&nbsp;<input type="submit" value="Go!" /></form>\n);
+    }
+
+    return $line;
 }
 
 # Basically, I just ripped the code out of the top of storylinestart()
@@ -662,241 +660,239 @@ sub storyline {
 # -Teg 2004-01-11
 
 sub getstoryline {
-	my $fulldate = shift;
-	my @remainingstories;
-	my $selected = 0;
-	
-	# Same deal as in the main storyline checker, but with a twist at the end
-	
-	$selected = storylinesubcheck(0, $fulldate, \@remainingstories);
+    my $fulldate = shift;
+    my @remainingstories;
+    my $selected = 0;
 
-	return $remainingstories[$selected];
-	
+    # Same deal as in the main storyline checker, but with a twist at the end
+
+    $selected = storylinesubcheck(0, $fulldate, \@remainingstories);
+
+    return $remainingstories[$selected];
+
 }
 
 sub storylinebanner {
-	my $fulldate = shift;
-	my $storyline = getstoryline($fulldate);
+    my $fulldate = shift;
+    my $storyline = getstoryline($fulldate);
 
-	my $line = qq(<a href="$url$storyline->{path}">);
+    my $line = qq(<a href="$url$storyline->{path}">);
 
-	unless ($storyline->{banner} eq '') {
-		$line .= qq(<img src="$storyline->{banner}" alt="$storyline->{cname}" title="$storyline->{cname}">)
-	} else {
-		$line .= qq($storyline->{cname});
-	}
+    unless ($storyline->{banner} eq '') {
+        $line .= qq(<img src="$storyline->{banner}" alt="$storyline->{cname}" title="$storyline->{cname}">)
+    } else {
+        $line .= qq($storyline->{cname});
+    }
 
-	$line .= qq(</a>);
+    $line .= qq(</a>);
 
-	return $line;
+    return $line;
 }
 
 sub storylinestart {
-	# Return a link to the start of the current storyline.
-	my $fulldate = shift;
-	my $link;
+    # Return a link to the start of the current storyline.
+    my $fulldate = shift;
+    my $link;
 
 
-	# Now, all we need is the path of the resulting story.  And because I want
-	# to be fancy, I'll alt/title tag it, too.
-	
-	my $storyline = getstoryline($fulldate);
-	my $name = $storyline->{cname};
+    # Now, all we need is the path of the resulting story.  And because I want
+    # to be fancy, I'll alt/title tag it, too.
+    my $storyline = getstoryline($fulldate);
+    my $name = $storyline->{cname};
 
-	if ($storyline->{path} =~ /^http\:\/\//) {
-		$link = $storyline->{path};
-	} else {
-		$link = $url.$storyline->{path};
-	}
+    if ($storyline->{path} =~ /^http\:\/\//) {
+        $link = $storyline->{path};
+    } else {
+        $link = $url.$storyline->{path};
+    }
 
-	# Same deal as in storyline().
+    # Same deal as in storyline().
 
-	$link =~ s/^(http\:\/\/(.*?)\/)\//$1/;
+    $link =~ s/^(http\:\/\/(.*?)\/)\//$1/;
 
-	if (-e ("$sitedir$imagedir$storystart")) {
-		return qq(<a href="$link"><img src="$url$imagedir$storystart" alt="Start of $name" title="Start of $name" border=0></a>);
-	} else {
-		return qq(<a href="$link">Start of $name</a>);
-	}
+    if (-e ("$sitedir$imagedir$storystart")) {
+        return qq(<a href="$link"><img src="$url$imagedir$storystart" alt="Start of $name" title="Start of $name" border=0></a>);
+    } else {
+        return qq(<a href="$link">Start of $name</a>);
+    }
 }
 
 sub storylinesubcheck {
-	my $startline = shift;
-	my $fulldate = shift;
-	my $remainingstories = shift;
-	my $selected = 0;
-	my $tempselected;
+    my $startline = shift;
+    my $fulldate = shift;
+    my $remainingstories = shift;
+    my $selected = 0;
+    my $tempselected;
 
-	my $firstdepth = $stories[$startline]->{depth};
+    my $firstdepth = $stories[$startline]->{depth};
 
-	# Now then.
+    # Now then.
 
-	# Now.  Then.
+    # Now.  Then.
 
-	# Take a look at each storyline past where we are now.  We're looking for
-	# the next storyline of the same depth, if one exists.  After this, we
-	# check to see if the current date falls between the two (or is greater
-	# than the first one if no more of the same depth exist).  If it does, or
-	# if the storyline has no date declared for it, we dive into the next
-	# depth level and check all THOSE for similar conditions until we run out
-	# of storylines at that depth.  Of course, once depth zero terminates, we
-	# return back to storyline() to dump it all out.
+    # Take a look at each storyline past where we are now.  We're looking for
+    # the next storyline of the same depth, if one exists.  After this, we
+    # check to see if the current date falls between the two (or is greater
+    # than the first one if no more of the same depth exist).  If it does, or
+    # if the storyline has no date declared for it, we dive into the next
+    # depth level and check all THOSE for similar conditions until we run out
+    # of storylines at that depth.  Of course, once depth zero terminates, we
+    # return back to storyline() to dump it all out.
 
-	# As we come across each valid storyline, we push its full $stories data
-	# into the @remainingstories hash, via reference passed between each call
-	# to this recursive curse.
-	for (my $i = $startline; $i <= $#stories; $i++) {
-		# We're only checking one depth at a time.
-		next if ($stories[$i]->{depth} > $firstdepth);
+    # As we come across each valid storyline, we push its full $stories data
+    # into the @remainingstories hash, via reference passed between each call
+    # to this recursive curse.
+    for (my $i = $startline; $i <= $#stories; $i++) {
+        # We're only checking one depth at a time.
+        next if ($stories[$i]->{depth} > $firstdepth);
 
-		# If this is ABOVE the starting depth, we're out of the current depth
-		# check and can thus stop here.
-		last if ($stories[$i]->{depth} < $firstdepth);
+        # If this is ABOVE the starting depth, we're out of the current depth
+        # check and can thus stop here.
+        last if ($stories[$i]->{depth} < $firstdepth);
 
-		# This storyline gets added in.
-		push @$remainingstories, $stories[$i];
+        # This storyline gets added in.
+        push @$remainingstories, $stories[$i];
 
-		# If the date of this one is less than the current date, bump up the
-		# SELECTED variable to this entry.
-		$selected = (scalar @$remainingstories - 1) if (
-			(defined($stories[$i]->{date}) and $stories[$i]->{date} <= $fulldate)
-			or # (The rest of the magic. -Teg)
-			(defined($stories[$i]->{pdate}) and $stories[$i]->{pdate} <= $fulldate)
-		);
-		
-		# Safely skip this if there's no subordinates to check.
-		next if ($subordinate[$i] == 0);
+        # If the date of this one is less than the current date, bump up the
+        # SELECTED variable to this entry.
+        $selected = (scalar @$remainingstories - 1) if (
+            (defined($stories[$i]->{date}) and $stories[$i]->{date} <= $fulldate)
+            or # (The rest of the magic. -Teg)
+            (defined($stories[$i]->{pdate}) and $stories[$i]->{pdate} <= $fulldate)
+        );
 
-		my $j;
-		# Seek the next same-level storyline.
-		for ($j = ($i + 1); $j <= ($#stories + 1); $j++) {
+        # Safely skip this if there's no subordinates to check.
+        next if ($subordinate[$i] == 0);
 
-			# We've fallen out of the array.  Thus, this depth is unmatched
-			# and this terminates the storyline array in general.
-			last if ($j > $#stories);
+        my $j;
+        # Seek the next same-level storyline.
+        for ($j = ($i + 1); $j <= ($#stories + 1); $j++) {
 
-			# Jackpot.  Bingo.  Yahtzee.  We have a winner.
-			last if ($stories[$j]->{depth} <= $firstdepth);
+            # We've fallen out of the array.  Thus, this depth is unmatched
+            # and this terminates the storyline array in general.
+            last if ($j > $#stories);
 
-			# Anything below this depth is skipped.
-			next if ($stories[$j]->{depth} > $firstdepth);
+            # Jackpot.  Bingo.  Yahtzee.  We have a winner.
+            last if ($stories[$j]->{depth} <= $firstdepth);
 
-		}
+            # Anything below this depth is skipped.
+            next if ($stories[$j]->{depth} > $firstdepth);
 
-		# Okay.  We've got the end of the depth.  $i is the start, $j is the
-		# end.  Simple.
+        }
 
-		# Main case: If the current storyline has an undefined date, proceed
-		# to the next depth.
-		if (!defined($stories[$i]->{date})) {
-			$tempselected = storylinesubcheck($i + 1, $fulldate, $remainingstories);
-			$selected = $tempselected if(defined($tempselected) and $tempselected > $selected);
-		} elsif ($j > $#stories) {
-			# Off the end
-			if ($stories[$i]->{date} <= $fulldate) {
-				# The date falls here, spit out the next chunk.
-				$tempselected = storylinesubcheck($i + 1, $fulldate, $remainingstories);
-				$selected = $tempselected if(defined($tempselected) and $tempselected > $selected);
-			} else {
-				next;
-			}
-		} elsif ($stories[$i]->{date} <= $fulldate and $stories[$j]->{date} > $fulldate) {
-			# It falls in here somewhere.
-			$tempselected = storylinesubcheck($i + 1, $fulldate, $remainingstories);
-			$selected = $tempselected if(defined($tempselected) and $tempselected > $selected);
-		} else {
-			next;
-		}
-	}
-	return $selected;
+        # Okay.  We've got the end of the depth.  $i is the start, $j is the
+        # end.  Simple.
+
+        # Main case: If the current storyline has an undefined date, proceed
+        # to the next depth.
+        if (!defined($stories[$i]->{date})) {
+            $tempselected = storylinesubcheck($i + 1, $fulldate, $remainingstories);
+            $selected = $tempselected if(defined($tempselected) and $tempselected > $selected);
+        } elsif ($j > $#stories) {
+            # Off the end
+            if ($stories[$i]->{date} <= $fulldate) {
+                # The date falls here, spit out the next chunk.
+                $tempselected = storylinesubcheck($i + 1, $fulldate, $remainingstories);
+                $selected = $tempselected if(defined($tempselected) and $tempselected > $selected);
+            } else {
+                next;
+            }
+        } elsif ($stories[$i]->{date} <= $fulldate and $stories[$j]->{date} > $fulldate) {
+            # It falls in here somewhere.
+            $tempselected = storylinesubcheck($i + 1, $fulldate, $remainingstories);
+            $selected = $tempselected if(defined($tempselected) and $tempselected > $selected);
+        } else {
+            next;
+        }
+    }
+    return $selected;
 }
 
 sub storylinefull {
-	# Returns the entire storyline dropdown with no collapsing.
-	# Still takes a fulldate so we select the proper default.
+    # Returns the entire storyline dropdown with no collapsing.
+    # Still takes a fulldate so we select the proper default.
 
-	my $fulldate = shift;
-	my $selected = 0;
-	my $line;
-	my $no_this_is_cgi = 0;
+    my $fulldate = shift;
+    my $selected = 0;
+    my $line;
+    my $no_this_is_cgi = 0;
 
-	# If this is Javascripty AND the headers have been called,
-	# set it up as a Javascripty bit.  Otherwise, fall to CGI.
-	### FIXME: The CGI interface uses "dropdown" as the parameter name,
-	### but the Javascript one uses "page".
-	if($storyline_use_javascript) {
-		# Error checking
-		if($headers_placed and !$js_story_placed) {
-			$line = qq(<select name="$js_prefix).qq(story">\n);
-		} else {
-			if(!$headers_placed) {
-				$line = "ERROR: Config says we want the Javascript dropdown, but the Javascript header hasn't been declared for this page yet!  Defaulting to CGI dropdown...<br>\n";
-				$no_this_is_cgi = 1;
-				$line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
-			}
-			if($js_story_placed) {
-				$line = "ERROR: Config says we want the Javascript dropdown, but it's already been placed on this page!  Ignoring this tag to avoid Javascript namespace collisions...<br>\n";
-				return $line;
-			}
-		}
-	} else {
-		# If it's not set at all, we can safely assume CGI.
-		$line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
-	}
+    # If this is Javascripty AND the headers have been called,
+    # set it up as a Javascripty bit.  Otherwise, fall to CGI.
+    ### FIXME: The CGI interface uses "dropdown" as the parameter name,
+    ### but the Javascript one uses "page".
+    if($storyline_use_javascript) {
+        # Error checking
+        if($headers_placed and !$js_story_placed) {
+            $line = qq(<select name="$js_prefix).qq(story">\n);
+        } else {
+            if(!$headers_placed) {
+                $line = "ERROR: Config says we want the Javascript dropdown, but the Javascript header hasn't been declared for this page yet!  Defaulting to CGI dropdown...<br>\n";
+                $no_this_is_cgi = 1;
+                $line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
+            }
+            if($js_story_placed) {
+                $line = "ERROR: Config says we want the Javascript dropdown, but it's already been placed on this page!  Ignoring this tag to avoid Javascript namespace collisions...<br>\n";
+                return $line;
+            }
+        }
+    } else {
+        # If it's not set at all, we can safely assume CGI.
+        $line = qq(<form method="post" action="$ddredirect"><select name="dropdown">\n);
+    }
 
-	# Since we're not doing any collapse logic, all we really need to do is
-	# grab the storyline array and chuck out EVERYTHING.  Except we do need
-	# to make sure we stop on the right entry for default purposes.  Or
-	# default porpoises.  That's all this loop does.
+    # Since we're not doing any collapse logic, all we really need to do is
+    # grab the storyline array and chuck out EVERYTHING.  Except we do need
+    # to make sure we stop on the right entry for default purposes.  Or
+    # default porpoises.  That's all this loop does.
 
-	for (my $i = 0; $i <= $#stories; $i++) {
-		next unless(defined($stories[$i]->{date}));
-		if($stories[$i]->{date} <= $fulldate) {
-			$selected = $i;
-		}
-	}
+    for (my $i = 0; $i <= $#stories; $i++) {
+        next unless(defined($stories[$i]->{date}));
+        if($stories[$i]->{date} <= $fulldate) {
+            $selected = $i;
+        }
+    }
 
-	# $selected is now set.  Loop again through the hash.
-	# Yes, this DOES look familiar.  From storyline() above.
+    # $selected is now set.  Loop again through the hash.
+    # Yes, this DOES look familiar.  From storyline() above.
 
-	for (my $i = 0; $i <= $#stories; $i++) {
-		my $link;
-		my $selectedtext;
+    for (my $i = 0; $i <= $#stories; $i++) {
+        my $link;
+        my $selectedtext;
 
-		# To avoid confusion for now, translate ALL dropdown
-		# destinations to absolute paths.
-		if ($stories[$i]->{path} eq "NULL" or $stories[$i]->{path} eq "") {
-			$link = "NULL";
-		} elsif ($stories[$i]->{path} =~ /^http\:\/\//) {
-			$link = $stories[$i]->{path};
-		} else {
-			$link = $url.$stories[$i]->{path};
-		}
+        # To avoid confusion for now, translate ALL dropdown
+        # destinations to absolute paths.
+        if ($stories[$i]->{path} eq "NULL" or $stories[$i]->{path} eq "") {
+            $link = "NULL";
+        } elsif ($stories[$i]->{path} =~ /^http\:\/\//) {
+            $link = $stories[$i]->{path};
+        } else {
+            $link = $url.$stories[$i]->{path};
+        }
 
-		$link =~ s/^(http\:\/\/(.*?)\/)\//$1/;
+        $link =~ s/^(http\:\/\/(.*?)\/)\//$1/;
 
-		if ($i == $selected) {
-			$selectedtext = " SELECTED";
-		} else {
-			$selectedtext = "";
-		}
+        if ($i == $selected) {
+            $selectedtext = " SELECTED";
+        } else {
+            $selectedtext = "";
+        }
 
-		if ($link eq "NULL") {
-			$selectedtext .= " DISABLED";
-		}
+        if ($link eq "NULL") {
+            $selectedtext .= " DISABLED";
+        }
 
-		$line .= qq(<option value="$link"$selectedtext>$stories[$i]->{name}</option>\n);
-	}
+        $line .= qq(<option value="$link"$selectedtext>$stories[$i]->{name}</option>\n);
+    }
 
-	if($storyline_use_javascript and !$no_this_is_cgi) {
-		$line .= qq(</select>&nbsp;<input type="button" value="Go!" onClick=").$js_prefix.qq(story_go();">\n);
-	} else {
-		$line .= qq(</select>&nbsp;<input type="submit" value="Go!"></form>\n);
-	}
+    if($storyline_use_javascript and !$no_this_is_cgi) {
+        $line .= qq(</select>&nbsp;<input type="button" value="Go!" onClick=").$js_prefix.qq(story_go();">\n);
+    } else {
+        $line .= qq(</select>&nbsp;<input type="submit" value="Go!"></form>\n);
+    }
 
-	return $line;
+    return $line;
 }
-		
 
 
 
@@ -911,43 +907,42 @@ my %monthhasstrip;
 my %captions;
 
 while (my $nextname = <$sitedir$comicsdir*>) {
-	$nextname =~ s/.*\///;
-	if ($nextname =~ /((\d\d\d\d)(\d\d)(\d\d)).*\.(?:gif|jpg|jpeg|png|bmp|tiff|txt|html|htm)$/i) {
-		push (@{$strips{$1}}, $nextname);
-		$dayhasstrip{$2}[$3][$4] = 1;
-		$monthhasstrip{$2}{$3} = 1;
-	} elsif ($nextname =~ /((\d\d\d\d)(\d\d)(\d\d)).*\.(tag|cap)$/i) {
-		open (CAPFILE, "$sitedir$comicsdir$nextname") or die "big problemski: $!";
-		my $caption = join '', <CAPFILE>;
-		close CAPFILE;
-		my ($filename) = ($nextname =~ /(^(.*)\.(?:gif|jpg|jpeg|png|bmp))/);
+    $nextname =~ s/.*\///;
+    if ($nextname =~ /((\d\d\d\d)(\d\d)(\d\d)).*\.(?:gif|jpg|jpeg|png|bmp|tiff|txt|html|htm)$/i) {
+        push (@{$strips{$1}}, $nextname);
+        $dayhasstrip{$2}[$3][$4] = 1;
+        $monthhasstrip{$2}{$3} = 1;
+    } elsif ($nextname =~ /((\d\d\d\d)(\d\d)(\d\d)).*\.(tag|cap)$/i) {
+        open (CAPFILE, "$sitedir$comicsdir$nextname") or die "big problemski: $!";
+        my $caption = join '', <CAPFILE>;
+        close CAPFILE;
+        my ($filename) = ($nextname =~ /(^(.*)\.(?:gif|jpg|jpeg|png|bmp))/);
 
-		if($filename eq "") {
-			aflog("WARNING: Caption file $nextname does not appear to be associated with any file!");
-			next;
-		}
+        if($filename eq "") {
+            aflog("WARNING: Caption file $nextname does not appear to be associated with any file!");
+            next;
+        }
 
-		if (defined $captions{$filename}) {
-			aflog("WARNING: More than one entry in captions list for $filename !! Later entries take precedence!");
-		}
-		$captions{$filename} = $caption;
-	}
-			
+        if (defined $captions{$filename}) {
+            aflog("WARNING: More than one entry in captions list for $filename !! Later entries take precedence!");
+        }
+        $captions{$filename} = $caption;
+    }
 }
 
 #=======================================================================
 # Pulls in captions from captions.txt. -Teg
 
 if (open (CAPTIONS, $captionsfile)) {
-	foreach (<CAPTIONS>) {
-		chomp;
-		my ($filename, $caption) = ($_ =~ /(\S*) (.*)/);
-		if (defined $captions{$filename}) {
-			aflog("WARNING: More than one caption for $filename !! Later entries take precedence!");
-		}
-		$captions{$filename} = $caption;
-	}
-	close CAPTIONS;
+    foreach (<CAPTIONS>) {
+        chomp;
+        my ($filename, $caption) = ($_ =~ /(\S*) (.*)/);
+        if (defined $captions{$filename}) {
+            aflog("WARNING: More than one caption for $filename !! Later entries take precedence!");
+        }
+        $captions{$filename} = $caption;
+    }
+    close CAPTIONS;
 }
 
 
@@ -956,25 +951,25 @@ if (open (CAPTIONS, $captionsfile)) {
 my @daylist = sort keys %strips;
 
 my ($fstrip, $fyear, $fmonth, $fday) = 
-	($daylist[0] =~ /((\d\d\d\d)(\d\d)(\d\d))/);
+    ($daylist[0] =~ /((\d\d\d\d)(\d\d)(\d\d))/);
 
 my ($lstrip, $lyear, $lmonth, $lday) =
-	($daylist[$#daylist] =~ /((\d\d\d\d)(\d\d)(\d\d))/);
+    ($daylist[$#daylist] =~ /((\d\d\d\d)(\d\d)(\d\d))/);
 
 aflog("(re)generating pages...");
 
 open (DAYTEMPLATE, "$workdir$datadir$dailytemplate")
-	or affatal("ERROR: No daily template found! Tried $workdir$datadir$dailytemplate.");
+    or affatal("ERROR: No daily template found! Tried $workdir$datadir$dailytemplate.");
 my $daytemplate = join '', <DAYTEMPLATE>;
 close DAYTEMPLATE;
 
 foreach my $i (0..$#daylist) {
-	$daylist[$i] =~ /(\d{8})/;
-	
-	open(TODAY, ">" . $sitedir . $dailydir . $1 . $dailyext);
-	my $line = parsetags($daytemplate, $1, $i);
-	print TODAY $line;
-	close TODAY;
+    $daylist[$i] =~ /(\d{8})/;
+
+    open(TODAY, ">" . $sitedir . $dailydir . $1 . $dailyext);
+    my $line = parsetags($daytemplate, $1, $i);
+    print TODAY $line;
+    close TODAY;
 }
 
 #=======================================================================
@@ -989,23 +984,23 @@ my $wdir = "$workdir$parsedir";
 traverse($wdir);
 
 sub traverse {
-	my $dir = shift;
-	
-	foreach (<$dir/*>) {
-		my ($nfn) = /.*?$wdir\/(.*)/;
-		if (-d) {
-			mkdir "$sitedir$nfn";
-			traverse($_);
-		} else {
-			open TEMPLATE, $_;
-			my $page = join '', <TEMPLATE>;
-			close TEMPLATE;
-			$page = parsetags($page, $daylist[$#daylist], $#daylist);
-			open OUTFILE, ">$sitedir$nfn" or die "$nfn $!";
-			print OUTFILE $page;
-			close OUTFILE;
-		}
-	}
+    my $dir = shift;
+
+    foreach (<$dir/*>) {
+        my ($nfn) = /.*?$wdir\/(.*)/;
+        if (-d) {
+            mkdir "$sitedir$nfn";
+            traverse($_);
+        } else {
+            open TEMPLATE, $_;
+            my $page = join '', <TEMPLATE>;
+            close TEMPLATE;
+            $page = parsetags($page, $daylist[$#daylist], $#daylist);
+            open OUTFILE, ">$sitedir$nfn" or die "$nfn $!";
+            print OUTFILE $page;
+            close OUTFILE;
+        }
+    }
 }
 
 
@@ -1018,45 +1013,45 @@ aflog("done (re)generating pages");
 
 # Are we even doing this in the first place?
 if($rss_full_generate or $rss_lite_generate){
-	# "Make me an RFC 822-compliant date, please."
-	my $now = strftime("%a, %d %b %Y %H:%M:%S",gmtime(time + $tzoffset));
-	$now .= " $timezone";
+    # "Make me an RFC 822-compliant date, please."
+    my $now = strftime("%a, %d %b %Y %H:%M:%S",gmtime(time + $tzoffset));
+    $now .= " $timezone";
 
-	aflog("Starting RSS generation");
+    aflog("Starting RSS generation");
 
     # First, we want the common header data.  We don't know specifically if
     # we want full, lite, or both, but both need the same data anyhoo.
 
     my $rssheader;
     $rssheader .= qq(<rss version="2.0">\n);
-	$rssheader .= qq( <channel>\n);
-	$rssheader .= qq(  <title>$rss_title</title>\n);
-	$rssheader .= qq(  <link>$rss_link</link>\n);
-	$rssheader .= qq(  <description>$rss_description</description>\n);
-	$rssheader .= qq(  <copyright>$rss_copyright</copyright>\n);
-	$rssheader .= qq(  <generator>$afversion</generator>\n);
-	$rssheader .= qq(  <lastBuildDate>$now</lastBuildDate>\n);
+    $rssheader .= qq( <channel>\n);
+    $rssheader .= qq(  <title>$rss_title</title>\n);
+    $rssheader .= qq(  <link>$rss_link</link>\n);
+    $rssheader .= qq(  <description>$rss_description</description>\n);
+    $rssheader .= qq(  <copyright>$rss_copyright</copyright>\n);
+    $rssheader .= qq(  <generator>$afversion</generator>\n);
+    $rssheader .= qq(  <lastBuildDate>$now</lastBuildDate>\n);
     
-	# The rss files are assumed to be relative to the public HTML root.  Let's
-	# see if we can get our hands on it.
+    # The rss files are assumed to be relative to the public HTML root.  Let's
+    # see if we can get our hands on it.
 
     # Part one: Full comic
-	if ($rss_full_generate) {
-		aflog("Full comic RSS generation to $rss_full_filename");
-		if(open RSSFULLOUT, ">$sitedir$rss_full_filename"){
-    		# BLOCK FOR IF WE CAN OPEN THIS
-    		# Initialize the file:
-    		print RSSFULLOUT $rssheader;
-    		for(my $i = 0;$i < $rss_limit;$i++){
-    			last if($i >= $#daylist);
-    			my $workingfulldate=$daylist[($#daylist-$i)];
-    			my ($workingyear,$workingmon,$workingdate) = ($workingfulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-    			$workingdate =~ s/^0//;
-    			my $workingmonth = $mnames[$workingmon];
-    			my $workingday = $dnames[zeller($workingfulldate)];
-    			my $pubdate = "$dshortnames[zeller($workingfulldate)], $workingdate $mshortnames[$workingmon] $workingyear 00:00:01 $timezone";
+    if ($rss_full_generate) {
+        aflog("Full comic RSS generation to $rss_full_filename");
+        if(open RSSFULLOUT, ">$sitedir$rss_full_filename"){
+            # BLOCK FOR IF WE CAN OPEN THIS
+            # Initialize the file:
+            print RSSFULLOUT $rssheader;
+            for(my $i = 0;$i < $rss_limit;$i++){
+                last if($i >= $#daylist);
+                my $workingfulldate=$daylist[($#daylist-$i)];
+                my ($workingyear,$workingmon,$workingdate) = ($workingfulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+                $workingdate =~ s/^0//;
+                my $workingmonth = $mnames[$workingmon];
+                my $workingday = $dnames[zeller($workingfulldate)];
+                my $pubdate = "$dshortnames[zeller($workingfulldate)], $workingdate $mshortnames[$workingmon] $workingyear 00:00:01 $timezone";
     
-    			print RSSFULLOUT <<RSSLINKHEAD;
+                print RSSFULLOUT <<RSSLINKHEAD;
       <item>
        <title>Comic for $workingday, $workingmonth $workingdate, $workingyear</title>
        <link>$url$dailydir$workingfulldate$dailyext</link>
@@ -1064,33 +1059,33 @@ if($rss_full_generate or $rss_lite_generate){
        <pubDate>$pubdate</pubDate>
 RSSLINKHEAD
     
-    			my $textblock;
-    			# If we're going with full comics, we can also get news bits
-    			# from data/news/.  News files are simply text files.
-    			# yyyymmdd.html or .txt, and all that.
-    			# We're assuming these files are HTML and thus don't need the
-    			# happy fun "linebreak-to-<br>" joy.
-    			if(open NEWS, "$workdir$datadir/news/$workingfulldate.html" or open NEWS, "$workdir$datadir/news/$workingfulldate.txt"){
-    				$textblock .= join '', <NEWS>;
-					# Break the ]]> CDATA closing tag if it exists (paranoia)
-					$textblock =~ s/\]\]\>/\] \]\>/g;
-    				$textblock .= "<br />";
-    				close NEWS;
-    			}
-				### REMINDER TO SELF: This is the line that puts the current comic
-				### info in.  So stop looking all through the code for it.
-				$textblock .= todays_comics_rss($workingfulldate);
+                my $textblock;
+                # If we're going with full comics, we can also get news bits
+                # from data/news/.  News files are simply text files.
+                # yyyymmdd.html or .txt, and all that.
+                # We're assuming these files are HTML and thus don't need the
+                # happy fun "linebreak-to-<br>" joy.
+                if(open NEWS, "$workdir$datadir/news/$workingfulldate.html" or open NEWS, "$workdir$datadir/news/$workingfulldate.txt"){
+                    $textblock .= join '', <NEWS>;
+                    # Break the ]]> CDATA closing tag if it exists (paranoia)
+                    $textblock =~ s/\]\]\>/\] \]\>/g;
+                    $textblock .= "<br />";
+                    close NEWS;
+                }
+                ### REMINDER TO SELF: This is the line that puts the current comic
+                ### info in.  So stop looking all through the code for it.
+                $textblock .= todays_comics_rss($workingfulldate);
     
-    			print RSSFULLOUT qq(   <description><![CDATA[$textblock]]></description>\n);
-				print RSSFULLOUT "  </item>\n";
-			}
-			print RSSFULLOUT <<RSSFOOTER;
+                print RSSFULLOUT qq(   <description><![CDATA[$textblock]]></description>\n);
+                print RSSFULLOUT "  </item>\n";
+            }
+            print RSSFULLOUT <<RSSFOOTER;
     </channel>
 </rss>
 RSSFOOTER
-			close RSSFULLOUT;
-		} else {
-			aflog("Can't open full comic RSS file $rss_full_filename!  $!");
+            close RSSFULLOUT;
+        } else {
+            aflog("Can't open full comic RSS file $rss_full_filename!  $!");
         }
         aflog("Full comic RSS generation complete.");
     }
@@ -1098,22 +1093,22 @@ RSSFOOTER
     # Part two: Lite mode (only the title and a link)
     # This looks strikingly similar to full.  Funny that.
 
-	if($rss_lite_generate){
+    if($rss_lite_generate){
         aflog("Lite mode RSS generation to $rss_lite_filename");
         if(open RSSLITEOUT, ">$sitedir$rss_lite_filename"){
-    		# BLOCK FOR IF WE CAN OPEN THIS
-    		# Initialize the file:
-    		print RSSLITEOUT $rssheader;
-    		for(my $i = 0;$i < $rss_limit;$i++){
-    			last if($i >= $#daylist);
-    			my $workingfulldate=$daylist[($#daylist-$i)];
-    			my ($workingyear,$workingmon,$workingdate) = ($workingfulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-    			$workingdate =~ s/^0//;
-    			my $workingmonth = $mnames[$workingmon];
-    			my $workingday = $dnames[zeller($workingfulldate)];
-    			my $pubdate = "$dshortnames[zeller($workingfulldate)], $workingdate $mshortnames[$workingmon] $workingyear 00:00:01 $timezone";
+            # BLOCK FOR IF WE CAN OPEN THIS
+            # Initialize the file:
+            print RSSLITEOUT $rssheader;
+            for(my $i = 0;$i < $rss_limit;$i++){
+                last if($i >= $#daylist);
+                my $workingfulldate=$daylist[($#daylist-$i)];
+                my ($workingyear,$workingmon,$workingdate) = ($workingfulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+                $workingdate =~ s/^0//;
+                my $workingmonth = $mnames[$workingmon];
+                my $workingday = $dnames[zeller($workingfulldate)];
+                my $pubdate = "$dshortnames[zeller($workingfulldate)], $workingdate $mshortnames[$workingmon] $workingyear 00:00:01 $timezone";
     
-    			print RSSLITEOUT <<RSSLINKHEADLITE;
+                print RSSLITEOUT <<RSSLINKHEADLITE;
       <item>
        <title>Comic for $workingday, $workingmonth $workingdate, $workingyear</title>
        <link>$url$dailydir$workingfulldate$dailyext</link>
@@ -1123,7 +1118,7 @@ RSSLINKHEADLITE
     
                 print RSSLITEOUT qq(   <description>&lt;a href=&quot;$url$dailydir$workingfulldate$dailyext&quot;&gt;Comic for $workingday, $workingmonth $workingdate, $workingyear&lt;/a&gt;</description>\n);
                 print RSSLITEOUT "  </item>\n";
-    		}
+            }
         print RSSLITEOUT <<RSSFOOTERLITE;
     </channel>
 </rss>
@@ -1165,185 +1160,185 @@ my %alreadyincluded;
 my %includecache;
 
 sub parsetags {
-	my $line = shift;
-	my $fulldate;
-	if ($line =~ s/\*\*\*set_date\s+(.*?)\*\*\*//) {
-		$fulldate = $1;
-	} else {
-		$fulldate = shift;
-	}
+    my $line = shift;
+    my $fulldate;
+    if ($line =~ s/\*\*\*set_date\s+(.*?)\*\*\*//) {
+        $fulldate = $1;
+    } else {
+        $fulldate = shift;
+    }
 
-	if($includecount == 0) {
-		# If %alreadyincluded is empty, this is NOT an include,
-		# so we need to reset the header and story bits.
-		$headers_placed = 0;
-		$js_story_placed = 0;
-	}
-	
-	(my $year, my $month, my $day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-	$day =~ s/^0//;
-	$month =~ s/^0//;
-	my $weekday = $dnames[zeller($fulldate)];
-	
-	my $i = shift;
+    if($includecount == 0) {
+        # If %alreadyincluded is empty, this is NOT an include,
+        # so we need to reset the header and story bits.
+        $headers_placed = 0;
+        $js_story_placed = 0;
+    }
 
-	# Sanity? What's that?
-	# 
-	# There is essentially no checking done here. Anyone using this feature
-	# is expected to understand what is going on well enough to fend for
-	# themselves barring an actual bug in AF.
-	# 
-	# Trying to get too fancy with regexes may cause problems.
-	#
-	# "pre" stuff occurs before all other parsing.
-	# "post" stuff occurs after all other parsing EXCEPT ***includenoparse***.
-	# "postinp" stuff occurs after ALL parsing, including ***includenoparse***.
-	# 
-	# Right now it's extremely fragile and easily broken. Not hard to fix,
-	# what's here was just done quickly as an initial "how will this be done?"
-	# implementation. I'll clean it up after I get some sleeeeeeeeeep.
-	# -Teg (20040627)
-	my @regpre;
-	my @regpost;
-	my @regpostinp;
+    (my $year, my $month, my $day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+    $day =~ s/^0//;
+    $month =~ s/^0//;
+    my $weekday = $dnames[zeller($fulldate)];
 
-RELOOP:	while ($line =~ s/\*\*\*regex\s+(.*?)\s+(s(.)(?:.*?)\2(?<!\\)(?:.*?)\2(?<!\\))\*\*\*//) {
-		my $when = $1;
-		my $regex = $2;
-		my $del = $3;
+    my $i = shift;
 
-		my $delcount = 0;
-		while ($regex =~ /(?<!\\)$del/) {
-			$delcount++;
-		}
-		if ($delcount != 3) {
-			aflog("Ignoring regex '$regex'. Contains too many delimiters ($2).");
-			next RELOOP;
-		}
+    # Sanity? What's that?
+    #
+    # There is essentially no checking done here. Anyone using this feature
+    # is expected to understand what is going on well enough to fend for
+    # themselves barring an actual bug in AF.
+    #
+    # Trying to get too fancy with regexes may cause problems.
+    #
+    # "pre" stuff occurs before all other parsing.
+    # "post" stuff occurs after all other parsing EXCEPT ***includenoparse***.
+    # "postinp" stuff occurs after ALL parsing, including ***includenoparse***.
+    #
+    # Right now it's extremely fragile and easily broken. Not hard to fix,
+    # what's here was just done quickly as an initial "how will this be done?"
+    # implementation. I'll clean it up after I get some sleeeeeeeeeep.
+    # -Teg (20040627)
+    my @regpre;
+    my @regpost;
+    my @regpostinp;
 
-		if ($regex =~ /\?\?\{/) {
-			aflog("Ignoring regex '$regex'. Appears to contain arbitrary Perl code.");
-			next RELOOP;
-		}
+RELOOP:    while ($line =~ s/\*\*\*regex\s+(.*?)\s+(s(.)(?:.*?)\2(?<!\\)(?:.*?)\2(?<!\\))\*\*\*//) {
+        my $when = $1;
+        my $regex = $2;
+        my $del = $3;
 
-		if ($regex =~ /(?<!\\)\$\{\\/) {
-			aflog ("Ignoring regex '$regex'. Appears to contain Perl function call.");
-			next RELOOP;
-		}
+        my $delcount = 0;
+        while ($regex =~ /(?<!\\)$del/) {
+            $delcount++;
+        }
+        if ($delcount != 3) {
+            aflog("Ignoring regex '$regex'. Contains too many delimiters ($2).");
+            next RELOOP;
+        }
 
-		my $code = "\$line =~ $regex";
+        if ($regex =~ /\?\?\{/) {
+            aflog("Ignoring regex '$regex'. Appears to contain arbitrary Perl code.");
+            next RELOOP;
+        }
 
-		switch ($when) {
-			case "pre"
-				{ push @regpre, $code }
-			case "post"
-				{ push @regpost, $code }
-			case "postinp"
-				{ push @regpostinp, $code }
-			else
-				{ aflog("Ignoring regex '$regex', \"when\" flag invalid or not specified."); next RELOOP; }
-		}
-	}
-	
-	# This needs to remain above everything else below.
-	foreach (@regpre) {
-		eval($_);
-	}
+        if ($regex =~ /(?<!\\)\$\{\\/) {
+            aflog ("Ignoring regex '$regex'. Appears to contain Perl function call.");
+            next RELOOP;
+        }
+
+        my $code = "\$line =~ $regex";
+
+        switch ($when) {
+            case "pre"
+                { push @regpre, $code }
+            case "post"
+                { push @regpost, $code }
+            case "postinp"
+                { push @regpostinp, $code }
+            else
+                { aflog("Ignoring regex '$regex', \"when\" flag invalid or not specified."); next RELOOP; }
+        }
+    }
+
+    # This needs to remain above everything else below.
+    foreach (@regpre) {
+        eval($_);
+    }
 
 
-	#***include*** *MUST* remain first! (for values of first not including ahead of regex stuff above)
-	$line =~ s/\*\*\*include\s+(.*?)\*\*\*/${\include($1,$fulldate,$i)}/g;
+    #***include*** *MUST* remain first! (for values of first not including ahead of regex stuff above)
+    $line =~ s/\*\*\*include\s+(.*?)\*\*\*/${\include($1,$fulldate,$i)}/g;
 
-	# PAY ATTENTION!  Past this, $headers_placed is set!
-	# This will also throw a fit if headers are placed twice!
-	$line =~ s/\*\*\*headers\*\*\*/${\make_headers()}/g;
+    # PAY ATTENTION!  Past this, $headers_placed is set!
+    # This will also throw a fit if headers are placed twice!
+    $line =~ s/\*\*\*headers\*\*\*/${\make_headers()}/g;
 
-	$line =~ s/\*\*\*today(?:s_date|'s_date)\*\*\*/$dnames[zeller($fulldate)], $mnames[$month] $day, $year/g;
-	$line =~ s/\*\*\*today(?:s|'s)_iso_date\*\*\*/$fulldate/g;
-	$line =~ s/\*\*\*today(?:s_|'s_)(?:comic|comics)\*\*\*/${\todays_comics($fulldate)}/g;
-	$line =~ s/\*\*\*previous_day\*\*\*/${\previous_day($i)}/g;
-	$line =~ s/\*\*\*next_day\*\*\*/${\next_day($i)}/g;
-	$line =~ s/\*\*\*first_day\*\*\*/${\first_day($i)}/g;
-	$line =~ s/\*\*\*last_day\*\*\*/${\last_day($i)}/g;
-	$line =~ s/\*\*\*storylinestart\*\*\*/${\storylinestart($fulldate)}/g;
-	$line =~ s/\*\*\*the_year\*\*\*/$year/g;
-	$line =~ s/\*\*\*day_of_the_month\*\*\*/$day/g;
-	$line =~ s/\*\*\*month_of_the_year\*\*\*/$mnames[$month]/g;
-	$line =~ s/\*\*\*short_month\*\*\*/$mshortnames[$month]/g;
-	$line =~ s/\*\*\*day_of_the_week\*\*\*/$weekday/g;
-	$line =~ s/\*\*\*daily_archive\*\*\*/${\daily_archive()}/g;
-	$line =~ s/\*\*\*url\*\*\*/$url/g;
-	$line =~ s/\*\*\*calendar\*\*\*/${\calendar($fulldate)}/g;
-	$line =~ s/\*\*\*big_calendar\*\*\*/${\big_calendar()}/g;
-	$line =~ s/\*\*\*home\*\*\*/<a href="$url">Home<\/a>/g;
-	$line =~ s/\*\*\*storyline\*\*\*/${\storyline($fulldate)}/g;
-	$line =~ s/\*\*\*storylinebanner\*\*\*/${\storylinebanner($fulldate)}/g;
-	$line =~ s/\*\*\*storylinefull\*\*\*/${\storylinefull($fulldate)}/g;
+    $line =~ s/\*\*\*today(?:s_date|'s_date)\*\*\*/$dnames[zeller($fulldate)], $mnames[$month] $day, $year/g;
+    $line =~ s/\*\*\*today(?:s|'s)_iso_date\*\*\*/$fulldate/g;
+    $line =~ s/\*\*\*today(?:s_|'s_)(?:comic|comics)\*\*\*/${\todays_comics($fulldate)}/g;
+    $line =~ s/\*\*\*previous_day\*\*\*/${\previous_day($i)}/g;
+    $line =~ s/\*\*\*next_day\*\*\*/${\next_day($i)}/g;
+    $line =~ s/\*\*\*first_day\*\*\*/${\first_day($i)}/g;
+    $line =~ s/\*\*\*last_day\*\*\*/${\last_day($i)}/g;
+    $line =~ s/\*\*\*storylinestart\*\*\*/${\storylinestart($fulldate)}/g;
+    $line =~ s/\*\*\*the_year\*\*\*/$year/g;
+    $line =~ s/\*\*\*day_of_the_month\*\*\*/$day/g;
+    $line =~ s/\*\*\*month_of_the_year\*\*\*/$mnames[$month]/g;
+    $line =~ s/\*\*\*short_month\*\*\*/$mshortnames[$month]/g;
+    $line =~ s/\*\*\*day_of_the_week\*\*\*/$weekday/g;
+    $line =~ s/\*\*\*daily_archive\*\*\*/${\daily_archive()}/g;
+    $line =~ s/\*\*\*url\*\*\*/$url/g;
+    $line =~ s/\*\*\*calendar\*\*\*/${\calendar($fulldate)}/g;
+    $line =~ s/\*\*\*big_calendar\*\*\*/${\big_calendar()}/g;
+    $line =~ s/\*\*\*home\*\*\*/<a href="$url">Home<\/a>/g;
+    $line =~ s/\*\*\*storyline\*\*\*/${\storyline($fulldate)}/g;
+    $line =~ s/\*\*\*storylinebanner\*\*\*/${\storylinebanner($fulldate)}/g;
+    $line =~ s/\*\*\*storylinefull\*\*\*/${\storylinefull($fulldate)}/g;
         $line =~ s/\*\*\*link_rel\*\*\*/${\link_rel($i)}/g;
-	$line =~ s/\*\*\*afversion\*\*\*/$afversion/g;
-	$line =~ s/\*\*\*(?:comics|comic)_from\s+(.*?)\*\*\*/${\todays_comics($1)}/g;
+    $line =~ s/\*\*\*afversion\*\*\*/$afversion/g;
+    $line =~ s/\*\*\*(?:comics|comic)_from\s+(.*?)\*\*\*/${\todays_comics($1)}/g;
 
-	# This needs to be above includenoparse and below everything else.
-	foreach (@regpost) {
-		eval($_);
-	}
+    # This needs to be above includenoparse and below everything else.
+    foreach (@regpost) {
+        eval($_);
+    }
 
-	#***includenoparse*** *MUST* remain last! (for values of last not including after 'foreach (@regpostinp)')
-	$line =~ s/\*\*\*includenoparse\s+(.*?)\*\*\*/${\includenoparse($1)}/g;
+    #***includenoparse*** *MUST* remain last! (for values of last not including after 'foreach (@regpostinp)')
+    $line =~ s/\*\*\*includenoparse\s+(.*?)\*\*\*/${\includenoparse($1)}/g;
 
-	# This needs to remain absolutely, positively last. For now.
-	foreach (@regpostinp) {
-		eval($_);
-	}
+    # This needs to remain absolutely, positively last. For now.
+    foreach (@regpostinp) {
+        eval($_);
+    }
 
-	return $line;
+    return $line;
 }
 
 #=======================================================================
 # ***include*** and ***includenoparse***
 
 sub include {
-	my $include = shift;
-	my $fulldate = shift;
-	my $i = shift;
-	my $includelines;
-	my $after;
+    my $include = shift;
+    my $fulldate = shift;
+    my $i = shift;
+    my $includelines;
+    my $after;
 
-	# Check for nest loops (Is this already included?)
-	if ($alreadyincluded{$include}) {
-		return "ERROR: Nest loop!";
-	}
+    # Check for nest loops (Is this already included?)
+    if ($alreadyincluded{$include}) {
+        return "ERROR: Nest loop!";
+    }
 
-	# This isn't already included, so let's tack it on.
-	$includelines = fetch_include("$workdir$parsedir$include");
-	if($includelines =~ /^ERROR/) {
-		return $includelines;
-	}
+    # This isn't already included, so let's tack it on.
+    $includelines = fetch_include("$workdir$parsedir$include");
+    if($includelines =~ /^ERROR/) {
+        return $includelines;
+    }
 
-	$alreadyincluded{$include} = 1;
-	$includecount++;
-	
-	# Now, feed the file back in through the tag parser, maintaining all data
-	# that came in in the first place (date, etc).
+    $alreadyincluded{$include} = 1;
+    $includecount++;
 
-	$after = parsetags($includelines,$fulldate,$i);
+    # Now, feed the file back in through the tag parser, maintaining all data
+    # that came in in the first place (date, etc).
 
-	# It's been parsed and we're not in a loop, so assume we can remove this
-	# from %alreadyincluded.
-	undef $alreadyincluded{$include};
-	$includecount--;
+    $after = parsetags($includelines,$fulldate,$i);
 
-	return $after;
+    # It's been parsed and we're not in a loop, so assume we can remove this
+    # from %alreadyincluded.
+    undef $alreadyincluded{$include};
+    $includecount--;
+
+    return $after;
 }
 
 sub includenoparse {
-	my $include = shift;
-	my $includelines;
+    my $include = shift;
+    my $includelines;
 
-	# Just do a good ol' yank-and-chuck.
-	$includelines = fetch_include("$workdir$parsedir$include");
+    # Just do a good ol' yank-and-chuck.
+    $includelines = fetch_include("$workdir$parsedir$include");
 
-	return $includelines;
+    return $includelines;
 }
 
 #=======================================================================
@@ -1351,142 +1346,142 @@ sub includenoparse {
 
 
 sub todays_comics {
-	my $fulldate = shift;
-	my $comics;
-	foreach (@{$strips{"$fulldate"}}) {
-		if (/(txt|htm|html)$/) {
-			open(TEXTFILE, "$sitedir$comicsdir/$_") or die "WTF?";
-			$comics .= join '', <TEXTFILE>;
-			close TEXTFILE;
-		} else {
-			my $ci = $_;
-			my $caption = defined $captions{$ci} ? $captions{$ci} : "";
-			$comics .= qq(<img src="$url$comicsdir$_" alt="$caption" title="$caption" class="comicimage" />\n<br />\n);
-		}
-	}
-	$comics =~ s/\<br\>\n$//;
-	return $comics;
+    my $fulldate = shift;
+    my $comics;
+    foreach (@{$strips{"$fulldate"}}) {
+        if (/(txt|htm|html)$/) {
+            open(TEXTFILE, "$sitedir$comicsdir/$_") or die "WTF?";
+            $comics .= join '', <TEXTFILE>;
+            close TEXTFILE;
+        } else {
+            my $ci = $_;
+            my $caption = defined $captions{$ci} ? $captions{$ci} : "";
+            $comics .= qq(<img src="$url$comicsdir$_" alt="$caption" title="$caption" class="comicimage" />\n<br />\n);
+        }
+    }
+    $comics =~ s/\<br\>\n$//;
+    return $comics;
 }
 
 sub todays_comics_rss {
-	my $fulldate = shift;
-	my $comics;
-	foreach (@{$strips{"$fulldate"}}) {
-		if (/(txt|htm|html)$/) {
-			open(TEXTFILE, "$sitedir$comicsdir/$_") or die "WTF?";
-			my $temptext .= join '',<TEXTFILE>;
+    my $fulldate = shift;
+    my $comics;
+    foreach (@{$strips{"$fulldate"}}) {
+        if (/(txt|htm|html)$/) {
+            open(TEXTFILE, "$sitedir$comicsdir/$_") or die "WTF?";
+            my $temptext .= join '',<TEXTFILE>;
 
-			# Now, the fun part.  We have to fix any relative <img src>
-			# or <a href> tags to be absolute.
+            # Now, the fun part.  We have to fix any relative <img src>
+            # or <a href> tags to be absolute.
 
-			$temptext =~ s/\<img\s+src="(.*?)"(.*?)\>/\<img src="${\reltoabs($1)}"$2\>/g;
-			$temptext =~ s/\<a\s+href="(.*?)"(.*?)\>/\<a href="${\reltoabs($1)}"$2\>/g;
-			$temptext =~ s/\]\]\>/\] \]\>/g;
+            $temptext =~ s/\<img\s+src="(.*?)"(.*?)\>/\<img src="${\reltoabs($1)}"$2\>/g;
+            $temptext =~ s/\<a\s+href="(.*?)"(.*?)\>/\<a href="${\reltoabs($1)}"$2\>/g;
+            $temptext =~ s/\]\]\>/\] \]\>/g;
 
-			$comics .= $temptext;
-			close TEXTFILE;
-		} else {
-			my $ci = $_;
-			my $caption = defined $captions{$ci} ? $captions{$ci} : "";
-			$comics .= qq(<img src="$url$comicsdir$_" alt="$caption" title="$caption"><br />);
-		}
-	}
-	return $comics;
+            $comics .= $temptext;
+            close TEXTFILE;
+        } else {
+            my $ci = $_;
+            my $caption = defined $captions{$ci} ? $captions{$ci} : "";
+            $comics .= qq(<img src="$url$comicsdir$_" alt="$caption" title="$caption"><br />);
+        }
+    }
+    return $comics;
 }
 
 sub first_day {
-	my $i = shift;
-	if ($i < 1) {
-		# If there's a ghosted image, use that.
+    my $i = shift;
+    if ($i < 1) {
+        # If there's a ghosted image, use that.
                 if($use_css_navbuttons) {
                         return qq(<div class="navbutton firstbuttonghosted siteimage" alt="This is the first comic"></div>);
                 } elsif( -e ("$sitedir$imagedir$first_day_ghosted")) {
-			return qq(<img src="$url$imagedir$first_day_ghosted" class="firstbuttonghosted" alt="This is the first comic" />);
-		} else {
-			return "";
-		}
-	} else {
+            return qq(<img src="$url$imagedir$first_day_ghosted" class="firstbuttonghosted" alt="This is the first comic" />);
+        } else {
+            return "";
+        }
+    } else {
                 if($use_css_navbuttons) {
-			return qq(<a href="$url$dailydir$daylist[0].html"><div class="navbutton firstbutton siteimage" alt="First Day"></div></a>);
+            return qq(<a href="$url$dailydir$daylist[0].html"><div class="navbutton firstbutton siteimage" alt="First Day"></div></a>);
                 } elsif (-e ("$sitedir$imagedir$first_day")) {
-			return qq(<a href="$url$dailydir$daylist[0].html"><img src="$url$imagedir$first_day" alt="First Day" class="firstbutton" /></a>);
-		} else {
-			return qq(<a href="$url$dailydir$daylist[0].html" class="firstbutton">First Day</a>);
-		}
-	}
+            return qq(<a href="$url$dailydir$daylist[0].html"><img src="$url$imagedir$first_day" alt="First Day" class="firstbutton" /></a>);
+        } else {
+            return qq(<a href="$url$dailydir$daylist[0].html" class="firstbutton">First Day</a>);
+        }
+    }
 }
 
 sub last_day {
-	my $i = shift;
-	if ($i == $#daylist) {
-		# If there's a ghosted image, use that.
+    my $i = shift;
+    if ($i == $#daylist) {
+        # If there's a ghosted image, use that.
                 if($use_css_navbuttons) {
                         return qq(<div class="navbutton lastbuttonghosted siteimage" alt="This is the most recent comic"></div>);
                 } elsif( -e ("$sitedir$imagedir$last_day_ghosted")) {
-			return qq(<img src="$url$imagedir$last_day_ghosted" class="lastbuttonghosted" alt="This is the most recent comic" />);
-		} else {
-			return "";
-		}
-	} else {
+            return qq(<img src="$url$imagedir$last_day_ghosted" class="lastbuttonghosted" alt="This is the most recent comic" />);
+        } else {
+            return "";
+        }
+    } else {
                 if($use_css_navbuttons) {
-			return qq(<a href="$url"><div class="navbutton lastbutton siteimage" alt="Last Day"></div></a>);
+            return qq(<a href="$url"><div class="navbutton lastbutton siteimage" alt="Last Day"></div></a>);
                 } elsif (-e ("$sitedir$imagedir$last_day")) {
-			return qq(<a href="$url"><img src="$url$imagedir$last_day" class="lastbutton" alt="Last Day" /></a>);
-		} else {
-			return qq(<a href="$url" class="lastbutton">Last Day</a>);
-		}
-	}
+            return qq(<a href="$url"><img src="$url$imagedir$last_day" class="lastbutton" alt="Last Day" /></a>);
+        } else {
+            return qq(<a href="$url" class="lastbutton">Last Day</a>);
+        }
+    }
 }
 
 sub previous_day {
-	my $i = shift;
-	if ($i < 1) {
-		# If there's a ghosted image, use that.
+    my $i = shift;
+    if ($i < 1) {
+        # If there's a ghosted image, use that.
                 if($use_css_navbuttons) {
                         return qq(<div class="navbutton prevbuttonghosted siteimage" alt="This is the first comic"></div>);
                 } elsif( -e ("$sitedir$imagedir$previous_day_ghosted")) {
-			return qq(<img src="$url$imagedir$previous_day_ghosted" class="prefbuttonghosted" alt="This is the first comic" />);
-		} else {
-			return "";
-		}
-	} else {
+            return qq(<img src="$url$imagedir$previous_day_ghosted" class="prefbuttonghosted" alt="This is the first comic" />);
+        } else {
+            return "";
+        }
+    } else {
                 if($use_css_navbuttons) {
-			return qq(<a href="$url$dailydir$daylist[$i-1].html"><div class="navbutton prevbutton siteimage" alt="Previous Day"></div></a>);
+            return qq(<a href="$url$dailydir$daylist[$i-1].html"><div class="navbutton prevbutton siteimage" alt="Previous Day"></div></a>);
                 } elsif (-e ("$sitedir$imagedir$previous_day")) {
-			return qq(<a href="$url$dailydir$daylist[$i-1].html"><img src="$url$imagedir$previous_day" class="prevbutton" alt="Previous Day" /></a>);
-		} else {
-			return qq(<a href="$url$dailydir$daylist[$i-1].html" class="prevbutton">Previous Day</a>);
-		}
-	}
+            return qq(<a href="$url$dailydir$daylist[$i-1].html"><img src="$url$imagedir$previous_day" class="prevbutton" alt="Previous Day" /></a>);
+        } else {
+            return qq(<a href="$url$dailydir$daylist[$i-1].html" class="prevbutton">Previous Day</a>);
+        }
+    }
 }
 
 sub next_day {
-	my $i = shift;
-	my $link;
-	if ($i == $#daylist) {
-		# If there's a ghosted image, use that.
+    my $i = shift;
+    my $link;
+    if ($i == $#daylist) {
+        # If there's a ghosted image, use that.
                 if($use_css_navbuttons) {
-			return qq(<div class="navbutton nextbuttonghosted siteimage" alt="This is the current comic"></div>);
+            return qq(<div class="navbutton nextbuttonghosted siteimage" alt="This is the current comic"></div>);
                 } elsif (-e ("$sitedir$imagedir$next_day_ghosted")) {
-			return qq(<img src="$url$imagedir$next_day_ghosted" class="nextbuttonghosted" alt="No Next Day" />);
-		} else {
-			return "";
-		}
-	}
+            return qq(<img src="$url$imagedir$next_day_ghosted" class="nextbuttonghosted" alt="No Next Day" />);
+        } else {
+            return "";
+        }
+    }
 
-	if ($i == ($#daylist - 1)) {
-		$link = $url;
-	} else {
-		$link = "$url$dailydir$daylist[$i+1].html";
-	}
+    if ($i == ($#daylist - 1)) {
+        $link = $url;
+    } else {
+        $link = "$url$dailydir$daylist[$i+1].html";
+    }
 
         if($use_css_navbuttons) {
-		return qq(<a href="$link"><div class="navbutton nextbutton siteimage" alt="Next Day"></div></a>);
+        return qq(<a href="$link"><div class="navbutton nextbutton siteimage" alt="Next Day"></div></a>);
         } elsif (-e ("$sitedir$imagedir$next_day")) {
-		return qq(<a href="$link"><img src="$url$imagedir$next_day" class="nextbutton" alt="Next Day" /></a>);
-	} else {
-		return qq(<a href="$link" class="nextbutton">Next Day</a>);
-	}
+        return qq(<a href="$link"><img src="$url$imagedir$next_day" class="nextbutton" alt="Next Day" /></a>);
+    } else {
+        return qq(<a href="$link" class="nextbutton">Next Day</a>);
+    }
 }
 
 sub link_rel {
@@ -1524,63 +1519,61 @@ sub link_rel {
 }
 
 sub daily_archive {
-	my $line = "";
-	my @reversestrips = reverse @daylist;
-	foreach (@reversestrips) {
-		/((\d\d\d\d)(\d\d)(\d\d))/;
-		$line .= qq(<a href="$url$dailydir$1.html">$mshortnames[$3] $4, $2</a><br />\n);
-	}
-	return $line;
+    my $line = "";
+    my @reversestrips = reverse @daylist;
+    foreach (@reversestrips) {
+        /((\d\d\d\d)(\d\d)(\d\d))/;
+        $line .= qq(<a href="$url$dailydir$1.html">$mshortnames[$3] $4, $2</a><br />\n);
+    }
+    return $line;
 }
 
 sub getndays {
-	my $year = shift; my $month = shift;
-	my @days = (0,31,28,31,30,31,30,31,31,30,31,30,31);
-	if ($month < 1) {
-		die "What? You want a month before January?! BAD USER/DEVELOPER!\n";
-	}
-	if ($month > 12) {
-		die "What the...?! There's nothing after December!\n";
-	}
-	if ($month == 2) { # This block is not as I originally intended, but in retrospect it's clearer, if not as efficient.
-		if ($year % 400 == 0) {
-			return 29;
-		} elsif ($year % 100 == 0) {
-			return 28;
-		} elsif ($year % 4 == 0) {
-			return 29;
-		} else {
-			return 28;
-		}
-	}
-	
-	return $days[$month];
-	
-	# It's not anymore.
+    my $year = shift; my $month = shift;
+    my @days = (0,31,28,31,30,31,30,31,31,30,31,30,31);
+    if ($month < 1) {
+        die "What? You want a month before January?! BAD USER/DEVELOPER!\n";
+    }
+    if ($month > 12) {
+        die "What the...?! There's nothing after December!\n";
+    }
+    if ($month == 2) { # This block is not as I originally intended, but in retrospect it's clearer, if not as efficient.
+        if ($year % 400 == 0) {
+            return 29;
+        } elsif ($year % 100 == 0) {
+            return 28;
+        } elsif ($year % 4 == 0) {
+            return 29;
+        } else {
+            return 28;
+        }
+    }
+
+    return $days[$month];
 }
 
 # Here there be dragons.
 # Seriously, don't mess with zeller. Anyone doing so is likely to get a headache AND break something. -Teg
 sub zeller {
-	my $fulldate = shift;
-	my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-	$day--;
-	my ($startmonth, $startyear, $leapfactor);
-	if ($month < 3) {
-		$startmonth = 0;
-		$startyear = $year - 1;
-	} else {
-		$startmonth = int(0.4*$month+2.3);
-		$startyear = $year;
-	}
-	$leapfactor = int($startyear/4) - int($startyear/100) + int($startyear/400);
-	return ((365 * $year + 31 * ($month-1) + $day + $leapfactor - $startmonth) % 7)+1;
+    my $fulldate = shift;
+    my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+    $day--;
+    my ($startmonth, $startyear, $leapfactor);
+    if ($month < 3) {
+        $startmonth = 0;
+        $startyear = $year - 1;
+    } else {
+        $startmonth = int(0.4*$month+2.3);
+        $startyear = $year;
+    }
+    $leapfactor = int($startyear/4) - int($startyear/100) + int($startyear/400);
+    return ((365 * $year + 31 * ($month-1) + $day + $leapfactor - $startmonth) % 7)+1;
 }
 
 sub affatal {
-	my $es = shift;
-	aflog($es);
-	die $es;
+    my $es = shift;
+    aflog($es);
+    die $es;
 }
 
 #=======================================================================
@@ -1588,18 +1581,18 @@ sub affatal {
 # WARNING: This section may cause spontanious insanity.
 
 sub big_calendar {
-	my $line;
+    my $line;
         $line .= "<div class=\"bigcalendarcontainer\">\n";
-	foreach my $year ($fyear..$lyear) {
-		foreach my $month (1..12) {
-			fdn($month);
-			next unless $monthhasstrip{$year}{$month};
-			my $date = $year . $month . "01";
-			$line .= "<div class=\"calendarbox\">" . calendar($date, 1) . "</div>";
-		}
-	}
+    foreach my $year ($fyear..$lyear) {
+        foreach my $month (1..12) {
+            fdn($month);
+            next unless $monthhasstrip{$year}{$month};
+            my $date = $year . $month . "01";
+            $line .= "<div class=\"calendarbox\">" . calendar($date, 1) . "</div>";
+        }
+    }
         $line .= "</div>\n";
-	return $line;
+    return $line;
 }
 
 # calendar() is long, complex, hard to read, suboptimal, and unfortunately
@@ -1621,134 +1614,134 @@ sub big_calendar {
 # CSS stuff.
 # -Spam 2011-11-21
 sub calendar {
-	my $fulldate = shift;
-	my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-	my $bigcal; $bigcal = 0 unless $bigcal = shift;
+    my $fulldate = shift;
+    my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+    my $bigcal; $bigcal = 0 unless $bigcal = shift;
 
-	my $prevmonth; my $pmname; my $pmyear; my $nextmonth; my $nmname; my $nmyear;
-	
-	unless ($bigcal) {
-		$prevmonth = prevmonth($fulldate);
+    my $prevmonth; my $pmname; my $pmyear; my $nextmonth; my $nmname; my $nmyear;
 
-		$nextmonth = nextmonth($fulldate);
-		
-		if ($prevmonth == -1) {
-			$prevmonth = "";
-		} else {
-			my ($pmn) = ($prevmonth =~ /\d\d\d\d(\d\d)\d\d/);
-			$pmname = $mshortnames[$pmn];
-			($pmyear) = ($prevmonth =~ /(\d\d\d\d)\d\d\d\d/);
-		}
-		if ($nextmonth == -1) {
-			$nextmonth = "";
-		} else {
-			my ($nmn) = ($nextmonth =~ /\d\d\d\d(\d\d)\d\d/);
-			$nmname = $mshortnames[$nmn];
-			($nmyear) = ($nextmonth =~ /(\d\d\d\d)\d\d\d\d/);
-		}
-	}
-	
-	my $line = qq(<div class="calendarbox">\n);
+    unless ($bigcal) {
+        $prevmonth = prevmonth($fulldate);
+
+        $nextmonth = nextmonth($fulldate);
+
+        if ($prevmonth == -1) {
+            $prevmonth = "";
+        } else {
+            my ($pmn) = ($prevmonth =~ /\d\d\d\d(\d\d)\d\d/);
+            $pmname = $mshortnames[$pmn];
+            ($pmyear) = ($prevmonth =~ /(\d\d\d\d)\d\d\d\d/);
+        }
+        if ($nextmonth == -1) {
+            $nextmonth = "";
+        } else {
+            my ($nmn) = ($nextmonth =~ /\d\d\d\d(\d\d)\d\d/);
+            $nmname = $mshortnames[$nmn];
+            ($nmyear) = ($nextmonth =~ /(\d\d\d\d)\d\d\d\d/);
+        }
+    }
+
+    my $line = qq(<div class="calendarbox">\n);
         $line .= qq(<table class="calendar">\n);
 
-	$line .= qq(<tr class="calendartoprow"><td colspan="7">);
-	
-	if ($prevmonth) {
-		$line .= qq(<span class="calendarmonthnav">);
-		$line .= qq(<a href="$url$dailydir$prevmonth.html">$pmname</a>);
+    $line .= qq(<tr class="calendartoprow"><td colspan="7">);
+
+    if ($prevmonth) {
+        $line .= qq(<span class="calendarmonthnav">);
+        $line .= qq(<a href="$url$dailydir$prevmonth.html">$pmname</a>);
                 $line .= qq(</span>);
-	}
-	
-	$line .= " <span class=\"calendarcurmonth\">$mnames[$month]&nbsp;$year</span> ";
+    }
 
-	if ($nextmonth) {
-		$line .= qq(<span class="calendarmonthnav">);
-		$line .= qq(<a href="$url$dailydir$nextmonth.html">$nmname</a>);
-		$line .= qq(</span>);
-	}
-	
-	$line .= "</td></tr>\n";
+    $line .= " <span class=\"calendarcurmonth\">$mnames[$month]&nbsp;$year</span> ";
 
-	my $days = getndays($year, $month);
-	my $nfdate = $year . $month . "01";
-	my $prevdays = (zeller($nfdate)-1); # Number of days to show from previous month.
-	my $pscount = $prevdays-1;
-	my $acount = 1; # [sic]
-	$line .= qq(<tr class="calendarrow">);
-	my $cells = 42;
-	foreach my $cell (1..$cells) {
-		if ($cell <= $prevdays) {
+    if ($nextmonth) {
+        $line .= qq(<span class="calendarmonthnav">);
+        $line .= qq(<a href="$url$dailydir$nextmonth.html">$nmname</a>);
+        $line .= qq(</span>);
+    }
+
+    $line .= "</td></tr>\n";
+
+    my $days = getndays($year, $month);
+    my $nfdate = $year . $month . "01";
+    my $prevdays = (zeller($nfdate)-1); # Number of days to show from previous month.
+    my $pscount = $prevdays-1;
+    my $acount = 1; # [sic]
+    $line .= qq(<tr class="calendarrow">);
+    my $cells = 42;
+    foreach my $cell (1..$cells) {
+        if ($cell <= $prevdays) {
                     # Cell is a part of LAST month.
-			my ($pmonth, $pyear);
-			
-			if (($month-1) >= 1) {
-				$pmonth = $month-1; fdn($pmonth);
-				$pyear = $year;
-			} else {
-				$pmonth = 12;
-				$pyear = ($year-1);
-			}
-			
-			if ($pyear < $fyear) {
-				$line .= qq(<td class="calendarprevmonthday"></td>);
-				next;
-			}
-			
-			my $pday = getndays($pyear, $pmonth)-$pscount; $pscount--;
-			
-			if ($dayhasstrip{$pyear}[$pmonth][$pday]) {
-				$line .= qq(<td class="calendarprevmonthday"><a href="$url$dailydir$pyear$pmonth$pday.html">$pday</a></td>);
-			} else {
-				$line .= qq(<td class="calendarprevmonthday">$pday</td>);
-			}
-			
-			fixtable($cell, $line);
-			next;
-		}
-		if ($cell - $prevdays <= $days) {
-                    # Cell is a part of THIS month.
-			my $today = $cell - $prevdays; my $dtoday = $today;
-			fdn($today, $month);
-			if ($dayhasstrip{$year}[$month][$today]) {
-				if ("$year$month$today" eq $fulldate and !$bigcal) {
-                                    # Cell is, in fact, TODAY.
-					$line .= qq(<td class="calendardaywithcomic calendartoday"><a href="$url$dailydir$year$month$today.html">$dtoday</a></td>);
-				} else {
-					$line .= qq(<td class="calendardaywithcomic"><a href="$url$dailydir$year$month$today.html">$dtoday</a></td>);
-				}
-			} else {
-				$line .= qq(<td>$dtoday</td>);
-			}
-			fixtable($cell, $line);
-			next;
-		}
-                # Cell is a part of NEXT month (note the next above; Teg, what
-                # were you THINKING, man? :-) ).
-		my ($pmonth, $pyear);
-		my $pday = $acount;
-		if ($month+1 <= 12) {
-			$pmonth = $month+1; fdn($pmonth); $pyear = $year;
-		} else {
-			$pmonth = "01"; $pyear = $year+1;
-		}
-		if ($pyear > $lyear) {
-			$line .= qq(<td class="calendarnextmonthday"></td>);
-			fixtable($cell, $line);
-			next;
-		}
-		if ($dayhasstrip{$pyear}[$pmonth][$pday]) {
-			my $pdday = $pday;
-			fdn($pday);
-			$line .= qq(<td class="calendarnextmonthday"><a href="$url$dailydir$pyear$pmonth$pday.html">$pdday</a></td>);
-		} else {
-			$line .= qq(<td class="calendarnextmonthday">$pday</td>);
-		}
-		$acount++;
-		fixtable($cell, $line);
-	}
-	$line .= "</table>\n";
+            my ($pmonth, $pyear);
+
+            if (($month-1) >= 1) {
+                $pmonth = $month-1; fdn($pmonth);
+                $pyear = $year;
+            } else {
+                $pmonth = 12;
+                $pyear = ($year-1);
+            }
+
+            if ($pyear < $fyear) {
+                $line .= qq(<td class="calendarprevmonthday"></td>);
+                next;
+            }
+
+            my $pday = getndays($pyear, $pmonth)-$pscount; $pscount--;
+
+            if ($dayhasstrip{$pyear}[$pmonth][$pday]) {
+                $line .= qq(<td class="calendarprevmonthday"><a href="$url$dailydir$pyear$pmonth$pday.html">$pday</a></td>);
+            } else {
+                $line .= qq(<td class="calendarprevmonthday">$pday</td>);
+            }
+
+            fixtable($cell, $line);
+            next;
+        }
+        if ($cell - $prevdays <= $days) {
+            # Cell is a part of THIS month.
+            my $today = $cell - $prevdays; my $dtoday = $today;
+            fdn($today, $month);
+            if ($dayhasstrip{$year}[$month][$today]) {
+                if ("$year$month$today" eq $fulldate and !$bigcal) {
+                    # Cell is, in fact, TODAY.
+                    $line .= qq(<td class="calendardaywithcomic calendartoday"><a href="$url$dailydir$year$month$today.html">$dtoday</a></td>);
+                } else {
+                    $line .= qq(<td class="calendardaywithcomic"><a href="$url$dailydir$year$month$today.html">$dtoday</a></td>);
+                }
+            } else {
+                $line .= qq(<td>$dtoday</td>);
+            }
+            fixtable($cell, $line);
+            next;
+        }
+        # Cell is a part of NEXT month (note the next above; Teg, what
+        # were you THINKING, man? :-) ).
+        my ($pmonth, $pyear);
+        my $pday = $acount;
+        if ($month+1 <= 12) {
+            $pmonth = $month+1; fdn($pmonth); $pyear = $year;
+        } else {
+            $pmonth = "01"; $pyear = $year+1;
+        }
+        if ($pyear > $lyear) {
+            $line .= qq(<td class="calendarnextmonthday"></td>);
+            fixtable($cell, $line);
+            next;
+        }
+        if ($dayhasstrip{$pyear}[$pmonth][$pday]) {
+            my $pdday = $pday;
+            fdn($pday);
+            $line .= qq(<td class="calendarnextmonthday"><a href="$url$dailydir$pyear$pmonth$pday.html">$pdday</a></td>);
+        } else {
+            $line .= qq(<td class="calendarnextmonthday">$pday</td>);
+        }
+        $acount++;
+        fixtable($cell, $line);
+    }
+    $line .= "</table>\n";
         $line .= "</div>\n";
-	return $line;
+    return $line;
 }
 
 sub fixtable {
@@ -1766,252 +1759,250 @@ sub fixtable {
 # Various utility functions, including logging functions.
 
 sub fdn {
-	foreach (@_) {
-		if (/^\d$/) {
-			$_ = "0$_";
-		}
-	}
+    foreach (@_) {
+        if (/^\d$/) {
+            $_ = "0$_";
+        }
+    }
 }
 
 sub aflog {
-	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time); $mon++;
-	fdn($hour, $min, $sec, $mday); 
-	print LOGFILE "$mshortnames[$mon]  $mday $hour:$min:$sec   @_\n";
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time); $mon++;
+    fdn($hour, $min, $sec, $mday);
+    print LOGFILE "$mshortnames[$mon]  $mday $hour:$min:$sec   @_\n";
 }
 
 #========================================================================
 # Search functions.
 
 sub prevstrip {
-	my $fulldate = shift;
-	
-	return -1 if $fulldate == $fstrip;
-	if ($fulldate < $fstrip) {
-		affatal("BUG: in prevstrip(). A date prior to the first in the"
-				." archive was passed in: p:$fulldate f:$fstrip");
-	}
-	
-	my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+    my $fulldate = shift;
 
-	while (1) {
-		if ($day == 1) {
-			if ($month == 1) {
-				$month = 12;
-				$year--;
-			} else {
-				$month--;
-			}
-			$day = getndays($year, $month);
-		} else {
-			$day--;
-		}
-		
-		fdn($day, $month);
-		
-		if ($dayhasstrip{$year}[$month][$day]) {
-			return "$year$month$day";
-		}
-	}
+    return -1 if $fulldate == $fstrip;
+    if ($fulldate < $fstrip) {
+        affatal("BUG: in prevstrip(). A date prior to the first in the"
+                ." archive was passed in: p:$fulldate f:$fstrip");
+    }
+
+    my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+
+    while (1) {
+        if ($day == 1) {
+            if ($month == 1) {
+                $month = 12;
+                $year--;
+            } else {
+                $month--;
+            }
+            $day = getndays($year, $month);
+        } else {
+            $day--;
+        }
+
+        fdn($day, $month);
+
+        if ($dayhasstrip{$year}[$month][$day]) {
+            return "$year$month$day";
+        }
+    }
 }
 
 my $pmcount1 = 0;
 
 sub prevmonth {
+    my $fulldate = shift;
 
-	
-	my $fulldate = shift;
+    my ($year, $month, $day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
 
-	my ($year, $month, $day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-
-	return -1 if ( $fulldate == $fstrip ||
-				  ( $month == $fmonth &&
-					$year == $fyear ) );
-	if ($fulldate < $fstrip) {
-		affatal("BUG: in prevmonth(). A date prior to the first in the"
-				." archive was passed in: p:$fulldate f:$fstrip");
-	}
+    return -1 if ( $fulldate == $fstrip ||
+                  ( $month == $fmonth &&
+                    $year == $fyear ) );
+    if ($fulldate < $fstrip) {
+        affatal("BUG: in prevmonth(). A date prior to the first in the"
+                ." archive was passed in: p:$fulldate f:$fstrip");
+    }
 
 
-	while (1) {
+    while (1) {
 
-		$pmcount1++;
-		
-		if ($month == 1) {
-			$month = 12;
-			$year--;
-		} else {
-			$month--;
-		}
-		fdn($month);
+        $pmcount1++;
 
-		if ($monthhasstrip{$year}{$month}) {
-			$day = getndays($year, $month);
-			unless ($dayhasstrip{$year}[$month][$day]) {
-				($day) = (prevstrip("$year$month$day") =~ /\d\d\d\d\d\d(\d\d)/);
-			}
+        if ($month == 1) {
+            $month = 12;
+            $year--;
+        } else {
+            $month--;
+        }
+        fdn($month);
 
-			fdn($day);
-			
-			$pmcount1 = 0;
-			return "$year$month$day";
-		} else {
-			next;
-		}
-	}
+        if ($monthhasstrip{$year}{$month}) {
+            $day = getndays($year, $month);
+            unless ($dayhasstrip{$year}[$month][$day]) {
+                ($day) = (prevstrip("$year$month$day") =~ /\d\d\d\d\d\d(\d\d)/);
+            }
+
+            fdn($day);
+
+            $pmcount1 = 0;
+            return "$year$month$day";
+        } else {
+            next;
+        }
+    }
 }
 
 sub nextstrip {
-	my $fulldate = shift;
-	
-	if ($fulldate == $lstrip) {
-		return -1;
-	}
-	if ($fulldate > $lstrip) {
-		affatal("BUG: in nextstrip(). A date after the first in the"
-		." archive was passed in: p:$fulldate f:$fstrip");
-	}
-	
-	my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-	
-	while (1) {
-		if ($day == getndays($year, $month)) {
-			if ($month == 12) {
-				$month = 1;
-				$year++;
-			} else {
-				$month++;
-				$day = 1;
-			}
-		} else {
-			$day++;
-		}
-		
-		fdn($day, $month);
-		
-		if ($dayhasstrip{$year}[$month][$day]) {
-			return "$year$month$day";
-		}
-	}
+    my $fulldate = shift;
+
+    if ($fulldate == $lstrip) {
+        return -1;
+    }
+    if ($fulldate > $lstrip) {
+        affatal("BUG: in nextstrip(). A date after the first in the"
+        ." archive was passed in: p:$fulldate f:$fstrip");
+    }
+
+    my ($year,$month,$day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
+
+    while (1) {
+        if ($day == getndays($year, $month)) {
+            if ($month == 12) {
+                $month = 1;
+                $year++;
+            } else {
+                $month++;
+                $day = 1;
+            }
+        } else {
+            $day++;
+        }
+
+        fdn($day, $month);
+
+        if ($dayhasstrip{$year}[$month][$day]) {
+            return "$year$month$day";
+        }
+    }
 }
 
 sub nextmonth {
-	my $fulldate = shift;
+    my $fulldate = shift;
 
-	my ($year, $month, $day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
-	
-	if ( $fulldate == $lstrip || ( $month == $lmonth && $year == $lyear ) ) {
-		return -1;
-	}
-	if ($fulldate > $lstrip) {
-		affatal("BUG: in nextmonth(). A date prior to the first in the"
-		." archive was passed in: p:$fulldate f:$fstrip");
-	}
+    my ($year, $month, $day) = ($fulldate =~ /(\d\d\d\d)(\d\d)(\d\d)/);
 
-	while (1) {
-		if ($month == 12) {
-			$month = 1;
-			$year++;
-		} else {
-			$month++;
-		}
-		fdn($month);
+    if ( $fulldate == $lstrip || ( $month == $lmonth && $year == $lyear ) ) {
+        return -1;
+    }
+    if ($fulldate > $lstrip) {
+        affatal("BUG: in nextmonth(). A date prior to the first in the"
+        ." archive was passed in: p:$fulldate f:$fstrip");
+    }
 
-		if ($monthhasstrip{$year}{$month}) {
-			$day = 1; fdn($day);
-			my $ret = "$year$month$day";
-			unless ($dayhasstrip{$year}[$month][$day]) {
-				$ret = nextstrip("$year$month$day");
-			}
-			return $ret;
-		}
-	}
+    while (1) {
+        if ($month == 12) {
+            $month = 1;
+            $year++;
+        } else {
+            $month++;
+        }
+        fdn($month);
+
+        if ($monthhasstrip{$year}{$month}) {
+            $day = 1; fdn($day);
+            my $ret = "$year$month$day";
+            unless ($dayhasstrip{$year}[$month][$day]) {
+                $ret = nextstrip("$year$month$day");
+            }
+            return $ret;
+        }
+    }
 }
 
 sub make_headers {
-	# This generates any headers required for Javascripty things later on.
-	# Headers on!  Apply directly to website!  Headers on!  Apply directly to website!
+    # This generates any headers required for Javascripty things later on.
+    # Headers on!  Apply directly to website!  Headers on!  Apply directly to website!
 
-	# First, if headers have been thrown already, complain.
-	if($headers_placed) {
-		return "ERROR: The headers have already been declared for this page!";
-	}
+    # First, if headers have been thrown already, complain.
+    if($headers_placed) {
+        return "ERROR: The headers have already been declared for this page!";
+    }
 
-	my $headeroutput;
+    my $headeroutput;
 
-	$headers_placed = 1;
+    $headers_placed = 1;
 
-	# For future use, this will parse any header-requiring option to output
-	# what needs to be output.  First, though, if no headers are needed,
-	# just give up now.
+    # For future use, this will parse any header-requiring option to output
+    # what needs to be output.  First, though, if no headers are needed,
+    # just give up now.
 
-	### FIXME: Later, with more options, this would be a big if statement of
-	### all of them ORed together.
-	if($storyline_use_javascript == 1) {
-		$headeroutput .= qq(<script type="text/javascript">\n<!--\n\n);
-	} else {
-		return $headeroutput;
-	}
+    ### FIXME: Later, with more options, this would be a big if statement of
+    ### all of them ORed together.
+    if($storyline_use_javascript == 1) {
+        $headeroutput .= qq(<script type="text/javascript">\n<!--\n\n);
+    } else {
+        return $headeroutput;
+    }
 
-	# Now, parse out each header option.
-	if($storyline_use_javascript == 1) {
-		# Storyline headers (simple redirector, acted upon by go button)
-		$headeroutput .= "function ".$js_prefix."story_go() {\n";
+    # Now, parse out each header option.
+    if($storyline_use_javascript == 1) {
+        # Storyline headers (simple redirector, acted upon by go button)
+        $headeroutput .= "function ".$js_prefix."story_go() {\n";
                 $headeroutput .= "\tvar stories = document.getElementsByName(\"".$js_prefix."story\")[0];\n";
-		$headeroutput .= "\tif (stories.value != \"NULL\") {\n";
-		$headeroutput .= "\t\tlocation.href=stories.value;\n";
-		$headeroutput .= "\t}\n";
-		$headeroutput .= "}\n\n";
-	}
+        $headeroutput .= "\tif (stories.value != \"NULL\") {\n";
+        $headeroutput .= "\t\tlocation.href=stories.value;\n";
+        $headeroutput .= "\t}\n";
+        $headeroutput .= "}\n\n";
+    }
 
-	# End of headers (assuming there were any)
-	$headeroutput .= "//-->\n";
-	$headeroutput .= "</script>\n";
+    # End of headers (assuming there were any)
+    $headeroutput .= "//-->\n";
+    $headeroutput .= "</script>\n";
 
-	return $headeroutput;
+    return $headeroutput;
 }
 
 sub reltoabs {
-	# This function hopefully converts any relative URL to an absolute one.
+    # This function hopefully converts any relative URL to an absolute one.
 
-	my $convert = shift;
+    my $convert = shift;
 
-	# Basically, all we can check for is whether or not there's a protocol
-	# declaration in the URL.  I can think of two protocols in common use and
-	# one that might get fringe use, and probably a few other fringes that
-	# get use that I don't know of, so we can only check for a protocol.
+    # Basically, all we can check for is whether or not there's a protocol
+    # declaration in the URL.  I can think of two protocols in common use and
+    # one that might get fringe use, and probably a few other fringes that
+    # get use that I don't know of, so we can only check for a protocol.
 
-	return $convert if ($convert =~ /\:\/\// or $convert =~ /^mailto\:/);
+    return $convert if ($convert =~ /\:\/\// or $convert =~ /^mailto\:/);
 
-	# To arms, men!
+    # To arms, men!
 
-	if($convert =~ /^\//){
-		# Relative to the root of the site
-		return $url.$convert;
-	} else {
-		# Must be relative to the archive pages
-		return $url.$conf{dailydir}.$convert;
-	}
+    if($convert =~ /^\//){
+        # Relative to the root of the site
+        return $url.$convert;
+    } else {
+        # Must be relative to the archive pages
+        return $url.$conf{dailydir}.$convert;
+    }
 
-	return "HEY!  reltoabs() exploded!";
+    return "HEY!  reltoabs() exploded!";
 }
 
 sub fetch_include {
-	# Working with the forces of %includecache, fetch_include fights to
-	# reduce parsing time by always remembering includes so we don't need
-	# to keep reopening the same file for every comic in a five hundred
-	# comic archive.
+    # Working with the forces of %includecache, fetch_include fights to
+    # reduce parsing time by always remembering includes so we don't need
+    # to keep reopening the same file for every comic in a five hundred
+    # comic archive.
 
-	my $file = shift;
-	if(exists $includecache{$file}) {
-		# Success!  We already know of this and can return it at once!
-		return $includecache{$file};
-	} else {
-		# We don't know of this file yet.  Let's rectify this situation.
-		open(FILE, $file) or return "ERROR: Can't open include file $file!";
-		$includecache{$file} = join '', <FILE>;
-		close(FILE);
-		return $includecache{$file};
-	}
+    my $file = shift;
+    if(exists $includecache{$file}) {
+        # Success!  We already know of this and can return it at once!
+        return $includecache{$file};
+    } else {
+        # We don't know of this file yet.  Let's rectify this situation.
+        open(FILE, $file) or return "ERROR: Can't open include file $file!";
+        $includecache{$file} = join '', <FILE>;
+        close(FILE);
+        return $includecache{$file};
+    }
 
-	return "HEY!  fetch_include() exploded!";
+    return "HEY!  fetch_include() exploded!";
 }
