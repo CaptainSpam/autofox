@@ -160,9 +160,25 @@ my $rss_link = $conf{rss_link};
 my $rss_description = $conf{rss_description};
 my $rss_copyright = $conf{rss_copyright};
 
+# basedir CAN be relative to the execution path.  You shouldn't do that, but
+# you can if you so wish.  However, for path-assembling purposes, it must end
+# with a forward slash.  We can attach that as need be.
+print "basedir doesn't start with a slash; this isn't fatal, and it'll be relative to\nwherever you executed the script, but chances are you didn't want that.\n" unless $basedir =~ /^\//;
+$basedir = "$basedir/" unless $basedir =~ /\/$/;
+
+# Both sitedir and workdir CAN refer to absolute locations, if they start with a
+# forward slash.  If not, they get basedir stapled onto the front of them.
 foreach ($sitedir, $workdir) {
 	$_ = "$basedir$_" unless /^\//;
 	$_ = "$_/" unless /\/$/;
+}
+
+# All other dirs should also end in a slash.  Starting with a slash is
+# irrelevant; they'll all go under their respective directories no matter what
+# (unless, say, the user puts .. in the path to break out, but if that's the
+# case, it's their own fault).
+foreach ($dailydir, $imagedir, $comicsdir, $workdir, $parsedir, $datadir, $uploaddir) {
+    $_ = "$_/" unless /\/$/;
 }
 
 while (my ($key, $val) = each %conf) {
