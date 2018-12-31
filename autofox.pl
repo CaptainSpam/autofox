@@ -24,6 +24,23 @@ use Switch;
 my $afversion = "AutoFox 2.5.4-css";
 
 #=======================================================================
+# Why am I counting from 1? Because it simplifies things when dealing
+# with user-supplied dates (which is about all AutoFox does) and saves
+# many an addition operation (yeah, I know, I'm not supposed to try and
+# optimize Perl code like that ;)). -Teg
+
+my @mnames = ("Error", "January", "February", "March", "April", "May", "June",
+	"July", "August", "September", "October", "November", "December");
+
+my @mshortnames = ("Error", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+	"Aug", "Sep", "Oct", "Nov", "Dec");
+
+my @dnames = ("Error", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
+	"Friday", "Saturday");
+
+my @dshortnames = ("Error", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+
+#=======================================================================
 # Read in the config file in a totally unsafe and error-prone way. -Teg
 
 my %conf = (
@@ -223,22 +240,6 @@ my $js_story_placed = 0;
 # header data.  Declared up here because we need it now, I guess.
 my $includecount = 0;
 
-#=======================================================================
-# Why am I counting from 1? Because it simplifies things when dealing
-# with user-supplied dates (which is about all AutoFox does) and saves
-# many an addition operation (yeah, I know, I'm not supposed to try and
-# optimize Perl code like that ;)). -Teg
-
-my @mnames = ("Error", "January", "February", "March", "April", "May", "June",
-	"July", "August", "September", "October", "November", "December");
-
-my @mshortnames = ("Error", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-	"Aug", "Sep", "Oct", "Nov", "Dec");
-
-my @dnames = ("Error", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-	"Friday", "Saturday");
-
-my @dshortnames = ("Error", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 
 chdir($basedir);
 
