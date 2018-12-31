@@ -256,9 +256,6 @@ my $js_story_placed = 0;
 # header data.  Declared up here because we need it now, I guess.
 my $includecount = 0;
 
-
-chdir($basedir);
-
 #=======================================================================
 # Version string and startup log message. -Teg
 #
@@ -288,11 +285,12 @@ sub checkdirectoryreadwrite($$) {
     checkdirectoryread($varname, $dir);
     (-w $dir) or affatal("$varname ($dir) isn't writeable!");
 }
-# basedir needs to be there, first of all.  It doesn't need to be EXPLICITLY
-# readable or writeable; those checks come implicitly with other directories.
-checkdirectoryexists("basedir", $basedir);
+# basedir needs to be there and readable.  We attempt to chdir into it first
+# thing, after all.
+checkdirectoryread("basedir", $basedir);
 
-# workdir, similarly, doesn't really need to be readable on its own.
+# workdir doesn't really need to be readable on its own.  We directly look at
+# the subdirs and shouldn't have reason to explicitly read from workdir.
 checkdirectoryexists("workdir", $workdir);
 
 # sitedir, however, DOES need to be explicitly writeable.  That's where we're
@@ -313,6 +311,9 @@ checkdirectoryreadwrite("dailydir", $sitedir . $dailydir);
 checkdirectoryread("imagedir", $sitedir . $imagedir);
 checkdirectoryread("parsedir", $workdir . $parsedir);
 checkdirectoryread("datadir", $workdir . $datadir);
+
+aflog("Entering $basedir...");
+chdir($basedir) or affatal("Couldn't chdir into $basedir: $!");
 
 aflog("Using $sitedir as the site directory...");
 aflog("Using $workdir as the workspace directory...");
