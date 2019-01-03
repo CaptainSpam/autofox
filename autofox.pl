@@ -19,7 +19,6 @@ use warnings;
 use File::Copy;
 use POSIX;
 #use local::lib;
-use Switch;
 
 my $afversion = "AutoFox 2.5.4-css";
 
@@ -1228,16 +1227,10 @@ RELOOP:    while ($line =~ s/\*\*\*regex\s+(.*?)\s+(s(.)(?:.*?)\2(?<!\\)(?:.*?)\
 
         my $code = "\$line =~ $regex";
 
-        switch ($when) {
-            case "pre"
-                { push @regpre, $code }
-            case "post"
-                { push @regpost, $code }
-            case "postinp"
-                { push @regpostinp, $code }
-            else
-                { aflog("Ignoring regex '$regex', \"when\" flag invalid or not specified."); next RELOOP; }
-        }
+        if($when eq "pre") { push @regpre, $code }
+        elsif($when eq "post") { push @regpost, $code }
+        elsif($when eq "postinp") { push @regpostinp, $code }
+        else { aflog("Ignoring regex '$regex', \"when\" flag invalid or not specified."); next RELOOP; }
     }
 
     # This needs to remain above everything else below.
