@@ -132,13 +132,6 @@ my $calnolink = $conf{calnolink};
 # http://www.perldoc.com/perl5.8.0/pod/perlfaq4.html#How-do-I-process-an-entire-hash-
 # Modified code accordingly. Methinks it's faster, not that it's likely to make
 # a whole lot of difference... -Teg
-
-while (my ($key, $val) = each %conf) {
-    if ($key =~ /dir$/ and $val !~ /\/$/) {
-        $conf{$key} .= "/"
-    }
-}
-
 my $basedir = $conf{basedir};
 my $sitedir = $conf{sitedir};
 my $dailydir = $conf{dailydir};
