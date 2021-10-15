@@ -20,7 +20,7 @@ use File::Copy;
 use POSIX;
 #use local::lib;
 
-my $afversion = "AutoFox 2.5.4-css";
+my $afversion = "AutoFox 2.5.5-css";
 
 #=======================================================================
 # Why am I counting from 1? Because it simplifies things when dealing
@@ -95,8 +95,11 @@ my %conf = (
     rss_title               =>      "DEFAULT TITLE",
     rss_link                =>      "http://localhost/",
     rss_description         =>      "Edit this in autofox.cfg!",
-    rss_copyright           =>      "Copyright sometime... by someone... doing something"
-### I want RSS image support later, but not right now.
+    rss_copyright           =>      "Copyright sometime... by someone... doing something",
+# Image; assume title and link are the same as the base.
+    rss_image_url           =>      "",
+    rss_image_width         =>      "",
+    rss_image_height        =>      "",
 );
 
 my $config = "autofox.cfg";
@@ -151,6 +154,10 @@ my $rss_title = $conf{rss_title};
 my $rss_link = $conf{rss_link};
 my $rss_description = $conf{rss_description};
 my $rss_copyright = $conf{rss_copyright};
+
+my $rss_image_url = $conf{rss_image_url};
+my $rss_image_width = $conf{rss_image_width};
+my $rss_image_height = $conf{rss_image_height};
 
 # basedir CAN be relative to the execution path.  You shouldn't do that, but
 # you can if you so wish.  However, for path-assembling purposes, it must end
@@ -1023,6 +1030,19 @@ if($rss_full_generate or $rss_lite_generate){
     $rssheader .= qq(  <copyright>$rss_copyright</copyright>\n);
     $rssheader .= qq(  <generator>$afversion</generator>\n);
     $rssheader .= qq(  <lastBuildDate>$now</lastBuildDate>\n);
+    $rssheader .= qq(  <docs>https://validator.w3.org/feed/docs/rss2.html</docs>\n);
+
+    if($rss_image_url ne '') {
+        $rssheader .= qq(  <image>\n);
+        $rssheader .= qq(   <url>$rss_image_url</url>\n);
+        $rssheader .= qq(   <title>$rss_title</title>\n);
+        $rssheader .= qq(   <link>$rss_link</title>\n);
+        if($rss_image_width ne '' and $rss_image_height ne '') {
+            $rssheader .= qq(   <width>$rss_image_width</width>\n);
+            $rssheader .= qq(   <height>$rss_image_height</height>\n);
+        }
+        $rssheader .= qq(  </image>\n);
+    }
     
     # The rss files are assumed to be relative to the public HTML root.  Let's
     # see if we can get our hands on it.
