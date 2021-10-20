@@ -1036,7 +1036,7 @@ if($rss_full_generate or $rss_lite_generate){
         $rssheader .= qq(  <image>\n);
         $rssheader .= qq(   <url>$rss_image_url</url>\n);
         $rssheader .= qq(   <title>$rss_title</title>\n);
-        $rssheader .= qq(   <link>$rss_link</title>\n);
+        $rssheader .= qq(   <link>$rss_link</link>\n);
         if($rss_image_width ne '' and $rss_image_height ne '') {
             $rssheader .= qq(   <width>$rss_image_width</width>\n);
             $rssheader .= qq(   <height>$rss_image_height</height>\n);
