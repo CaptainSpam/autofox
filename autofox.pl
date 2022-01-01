@@ -18,9 +18,10 @@ use strict;
 use warnings;
 use File::Copy;
 use POSIX;
+use JSON;
 #use local::lib;
 
-my $afversion = "AutoFox 2.5.5-css";
+my $afversion = "AutoFox 2.5.6-json";
 
 #=======================================================================
 # Why am I counting from 1? Because it simplifies things when dealing
@@ -100,6 +101,10 @@ my %conf = (
     rss_image_url           =>      "",
     rss_image_width         =>      "",
     rss_image_height        =>      "",
+# JSON generation options
+    json_generate           =>      0,
+    json_index_filename     =>      "comic",
+    json_suffix             =>      ".0.json",
 );
 
 my $config = "autofox.cfg";
@@ -131,6 +136,8 @@ my $calnolink = $conf{calnolink};
 
 # FIXME: did some quick'n'dirty stuff here 20031104. Needs cleaned up. -Teg
 
+# FIXME (2021-12-31): Maybe keeping everything in %conf is a cleaner idea? -Nick
+
 # 2004-01-03 (Spirit to land tonight!) Just noticed this FAQ entry:
 # http://www.perldoc.com/perl5.8.0/pod/perlfaq4.html#How-do-I-process-an-entire-hash-
 # Modified code accordingly. Methinks it's faster, not that it's likely to make
@@ -158,6 +165,10 @@ my $rss_copyright = $conf{rss_copyright};
 my $rss_image_url = $conf{rss_image_url};
 my $rss_image_width = $conf{rss_image_width};
 my $rss_image_height = $conf{rss_image_height};
+
+my $json_generate = $conf{json_generate};
+my $json_index_filename = $conf{json_index_filename};
+my $json_suffix = $conf{json_suffix};
 
 # basedir CAN be relative to the execution path.  You shouldn't do that, but
 # you can if you so wish.  However, for path-assembling purposes, it must end
@@ -962,14 +973,68 @@ open (DAYTEMPLATE, "$workdir$datadir$dailytemplate")
 my $daytemplate = join '', <DAYTEMPLATE>;
 close DAYTEMPLATE;
 
+sub getjsonstringforindex($) {
+    # FIXME: Maybe whenever this big mythical rewrite happens, I should make
+    # it NOT depend on a global array like @daylist.  Until then, though...
+    my $i = shift;
+
+    (my $currentday) = ($daylist[$i] =~ /(\d{8})/);
+    my $prevday = ($i < 1 ? "" : $daylist[$i - 1]);
+    my $nextday = ($i >= $#daylist ? "" : $daylist[$#daylist]);
+    my $firstday = $daylist[0];
+    my $lastday = $daylist[$#daylist];
+    (my $year, my $month, my $day) = ($currentday =~ /(\d{4})(\d{2})(\d{2})/);
+    my $caption = defined $captions{$currentday} ? $captions{$currentday} : "";
+
+    my $news = "";
+    if(open NEWS, "$workdir$datadir/news/$currentday.html" or open NEWS, "$workdir$datadir/news/$currentday.txt") {
+        $news = join '', <NEWS>;
+        chomp $news;
+        close NEWS;
+    }
+
+    my %comicdata;
+
+    $comicdata{currentday} = $currentday;
+    $comicdata{prevday} = $prevday;
+    $comicdata{nextday} = $nextday;
+    $comicdata{firstday} = $firstday;
+    $comicdata{lastday} = $lastday;
+    $comicdata{year} = $year;
+    $comicdata{month} = $month;
+    $comicdata{day} = $day;
+    $comicdata{caption} = $caption;
+    $comicdata{news} = $news;
+
+    my @imgs;
+    foreach (@{$strips{$currentday}}) {
+        unless(/(txt|htm|html)$/) {
+            push(@imgs, "$url$comicsdir$_");
+        }
+    }
+
+    $comicdata{imgs} = \@imgs;
+
+    return to_json(\%comicdata);
+}
+
 foreach my $i (0..$#daylist) {
     $daylist[$i] =~ /(\d{8})/;
+    my $currentday = $1;
+    # $i is the index within @dalylist, $currentday is the YYYYMMDD.
 
-    open(TODAY, ">" . $sitedir . $dailydir . $1 . $dailyext);
-    my $line = parsetags($daytemplate, $1, $i);
+    open TODAY, ">$sitedir$dailydir$currentday$dailyext";
+    my $line = parsetags($daytemplate, $currentday, $i);
     print TODAY $line;
     close TODAY;
+
+    if($json_generate) {
+        open JSON, ">$sitedir$dailydir$currentday$json_suffix" or die "Can't open $sitedir$dailydir$currentday$json_suffix for JSON output: $!";
+        print JSON getjsonstringforindex($i);
+        close JSON;
+    }
 }
+
 
 #=======================================================================
 # It's recursive either because I really, really suck, or because I'm
@@ -1002,6 +1067,12 @@ sub traverse {
     }
 }
 
+# If we're generating JSON, also generate the top-level one.
+if($json_generate) {
+    open JSON, ">$sitedir$json_index_filename$json_suffix" or die "Can't open $sitedir$json_index_filename$json_suffix for index-level JSON output: $!";
+    print JSON getjsonstringforindex($#daylist);
+    close JSON;
+}
 
 aflog("done (re)generating pages");
 
