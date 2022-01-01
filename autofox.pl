@@ -937,6 +937,8 @@ while (my $nextname = <$sitedir$comicsdir*>) {
             aflog("WARNING: More than one entry in captions list for $filename !! Later entries take precedence!");
         }
         $captions{$filename} = $caption;
+    } else {
+        aflog("WARNING: Don't know how to handle $nextname, skipping...");
     }
 }
 
