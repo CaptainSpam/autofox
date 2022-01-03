@@ -1018,7 +1018,7 @@ sub getjsonstringforindex($) {
 
     $comicdata{imgs} = \@imgs;
 
-    return to_json(\%comicdata);
+    return to_json(\%comicdata, {canonical => 1});
 }
 
 foreach my $i (0..$#daylist) {
