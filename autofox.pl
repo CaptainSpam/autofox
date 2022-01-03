@@ -1007,6 +1007,7 @@ sub getjsonstringforindex($) {
     $comicdata{day} = $day;
     $comicdata{caption} = $caption;
     $comicdata{news} = $news;
+    $comicdata{url} = "$url$dailydir$currentday.html";
 
     my @imgs;
     foreach (@{$strips{$currentday}}) {
