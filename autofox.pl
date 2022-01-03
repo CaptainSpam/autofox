@@ -982,7 +982,7 @@ sub getjsonstringforindex($) {
 
     (my $currentday) = ($daylist[$i] =~ /(\d{8})/);
     my $prevday = ($i < 1 ? "" : $daylist[$i - 1]);
-    my $nextday = ($i >= $#daylist ? "" : $daylist[$#daylist]);
+    my $nextday = ($i >= $#daylist ? "" : $daylist[$i + 1]);
     my $firstday = $daylist[0];
     my $lastday = $daylist[$#daylist];
     (my $year, my $month, my $day) = ($currentday =~ /(\d{4})(\d{2})(\d{2})/);
