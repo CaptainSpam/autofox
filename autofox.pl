@@ -3,7 +3,7 @@
 # AutoFox 2.5
 
 # Copyright (c) 2003-2008 Nicholas "Tegeran" Knight <nknight@runawaynet.com>
-# Copyright (c) 2003-2018 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
+# Copyright (c) 2003-2022 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
 # See "LICENSE" file at the toplevel for your daily dose of 3-clause BSD.
 
 # This is 2000-ish lines of semi-(readable|maintainable) Perl. It ain't pretty,
@@ -19,9 +19,10 @@ use warnings;
 use File::Copy;
 use POSIX;
 use JSON;
+use Digest::SHA;
 #use local::lib;
 
-my $afversion = "AutoFox 2.5.6-json";
+my $afversion = "AutoFox 2.5.6-json-sha256";
 
 #=======================================================================
 # Why am I counting from 1? Because it simplifies things when dealing
@@ -105,6 +106,7 @@ my %conf = (
     json_generate           =>      0,
     json_index_filename     =>      "comic",
     json_suffix             =>      ".0.json",
+    json_digest             =>      1,
 );
 
 my $config = "autofox.cfg";
@@ -169,6 +171,7 @@ my $rss_image_height = $conf{rss_image_height};
 my $json_generate = $conf{json_generate};
 my $json_index_filename = $conf{json_index_filename};
 my $json_suffix = $conf{json_suffix};
+my $json_digest = $conf{json_digest};
 
 # basedir CAN be relative to the execution path.  You shouldn't do that, but
 # you can if you so wish.  However, for path-assembling purposes, it must end
@@ -1010,13 +1013,24 @@ sub getjsonstringforindex($) {
     $comicdata{url} = "$url$dailydir$currentday.html";
 
     my @imgs;
+    my $digest = Digest::SHA->new("SHA-256");
+
     foreach (@{$strips{$currentday}}) {
         unless(/(txt|htm|html)$/) {
             push(@imgs, "$url$comicsdir$_");
+            if($json_digest) {
+                $digest->addfile("$sitedir$comicsdir/$_");
+            }
         }
     }
 
     $comicdata{imgs} = \@imgs;
+
+    # Only use the digest if it's enabled.  Hashing up an archive's worth of
+    # files might take some time, of course.
+    if($json_digest) {
+        $comicdata{sha256} = $digest->hexdigest;
+    }
 
     return to_json(\%comicdata, {canonical => 1});
 }
