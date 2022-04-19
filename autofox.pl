@@ -22,7 +22,7 @@ use JSON;
 use Digest::SHA;
 #use local::lib;
 
-my $afversion = "AutoFox 2.5.6-json-sha256";
+my $afversion = "AutoFox 2.5.6-json-footnote";
 
 #=======================================================================
 # Why am I counting from 1? Because it simplifies things when dealing
@@ -1013,10 +1013,21 @@ sub getjsonstringforindex($) {
     $comicdata{url} = "$url$dailydir$currentday.html";
 
     my @imgs;
+    my @footnotes;
     my $digest = Digest::SHA->new("SHA-256");
 
     foreach (@{$strips{$currentday}}) {
-        unless(/(txt|htm|html)$/) {
+        if(/(txt|htm|html)$/) {
+            # Footnotes are added as their entire text.
+            open(FOOTNOTE, "$sitedir$comicsdir/$_") or die "Comic file $_ is in the list for $currentday, but it couldn't be opened for inclusion in JSON! $!";
+            my $footnotetext = convert_relative_attributes(join '', <FOOTNOTE>);
+            close FOOTNOTE;
+            push(@footnotes, $footnotetext);
+            if($json_digest) {
+                $digest->add($footnotetext);
+            }
+        } else {
+            # Images are added as URLs.
             push(@imgs, "$url$comicsdir$_");
             if($json_digest) {
                 $digest->addfile("$sitedir$comicsdir/$_");
@@ -1025,6 +1036,7 @@ sub getjsonstringforindex($) {
     }
 
     $comicdata{imgs} = \@imgs;
+    $comicdata{footnotes} = \@footnotes;
 
     # Only use the digest if it's enabled.  Hashing up an archive's worth of
     # files might take some time, of course.
@@ -1051,14 +1063,6 @@ foreach my $i (0..$#daylist) {
         close JSON;
     }
 }
-
-
-#=======================================================================
-# It's recursive either because I really, really suck, or because I'm
-# insane. -Teg
-
-### Teg, you're insane. :-) But that's what you're looking for in this
-### part, I think. -Spam
 
 my $wdir = "$workdir$parsedir";
 
@@ -1464,16 +1468,11 @@ sub todays_comics_rss {
         if (/(txt|htm|html)$/) {
             open(TEXTFILE, "$sitedir$comicsdir/$_") or die "WTF?";
             my $temptext .= join '',<TEXTFILE>;
+            close TEXTFILE;
 
             # Now, the fun part.  We have to fix any relative <img src>
             # or <a href> tags to be absolute.
-
-            $temptext =~ s/\<img\s+src="(.*?)"(.*?)\>/\<img src="${\reltoabs($1)}"$2\>/g;
-            $temptext =~ s/\<a\s+href="(.*?)"(.*?)\>/\<a href="${\reltoabs($1)}"$2\>/g;
-            $temptext =~ s/\]\]\>/\] \]\>/g;
-
-            $comics .= $temptext;
-            close TEXTFILE;
+            $comics .= convert_relative_attributes($temptext);
         } else {
             my $ci = $_;
             my $caption = defined $captions{$ci} ? $captions{$ci} : "";
@@ -2053,6 +2052,20 @@ sub make_headers {
     $headeroutput .= "</script>\n";
 
     return $headeroutput;
+}
+
+sub convert_relative_attributes ($) {
+    # Convert relative img src or a href references in a given block of text to
+    # absolute references.
+    my $text = shift;
+
+    # This only really works for img src and a href, as mentioned.  This can
+    # likely be made more powerful if I had a use for it to be more powerful.
+    $text =~ s/\<img\s+src="(.*?)"(.*?)\>/\<img src="${\reltoabs($1)}"$2\>/g;
+    $text =~ s/\<a\s+href="(.*?)"(.*?)\>/\<a href="${\reltoabs($1)}"$2\>/g;
+    $text =~ s/\]\]\>/\] \]\>/g;
+
+    return $text;
 }
 
 sub reltoabs {
