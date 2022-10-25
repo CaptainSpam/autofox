@@ -7,7 +7,8 @@
 # See "LICENSE" file at the toplevel for your daily dose of 3-clause BSD.
 
 # This is 2000-ish lines of semi-(readable|maintainable) Perl. It ain't pretty,
-# but by some miracle it works, and it's surprisingly fast.
+# but by some miracle it works, and it's surprisingly fast. I should really
+# think about breaking this up into modules at some point.
 
 # It might be possible to clean AutoFox up quite a bit by using more of the
 # standard modules. Unfortunately my familiarity with things outside the core
@@ -22,7 +23,7 @@ use JSON;
 use Digest::SHA;
 #use local::lib;
 
-my $afversion = "AutoFox 2.5.6-json-footnote";
+my $afversion = "AutoFox 2.5.7-og";
 
 #=======================================================================
 # Why am I counting from 1? Because it simplifies things when dealing
@@ -1351,7 +1352,7 @@ RELOOP:    while ($line =~ s/\*\*\*regex\s+(.*?)\s+(s(.)(?:.*?)\2(?<!\\)(?:.*?)\
     # This will also throw a fit if headers are placed twice!
     $line =~ s/\*\*\*headers\*\*\*/${\make_headers()}/g;
 
-    $line =~ s/\*\*\*today(?:s_date|'s_date)\*\*\*/$dnames[zeller($fulldate)], $mnames[$month] $day, $year/g;
+    $line =~ s/\*\*\*today(?:s_date|'s_date)\*\*\*/$weekday, $mnames[$month] $day, $year/g;
     $line =~ s/\*\*\*today(?:s|'s)_iso_date\*\*\*/$fulldate/g;
     $line =~ s/\*\*\*today(?:s_|'s_)(?:comic|comics)\*\*\*/${\todays_comics($fulldate)}/g;
     $line =~ s/\*\*\*previous_day\*\*\*/${\previous_day($i)}/g;
@@ -1366,6 +1367,7 @@ RELOOP:    while ($line =~ s/\*\*\*regex\s+(.*?)\s+(s(.)(?:.*?)\2(?<!\\)(?:.*?)\
     $line =~ s/\*\*\*day_of_the_week\*\*\*/$weekday/g;
     $line =~ s/\*\*\*daily_archive\*\*\*/${\daily_archive()}/g;
     $line =~ s/\*\*\*url\*\*\*/$url/g;
+    $line =~ s/\*\*\*comic_url\*\*\*/$url$dailydir$fulldate.html/g;
     $line =~ s/\*\*\*calendar\*\*\*/${\calendar($fulldate)}/g;
     $line =~ s/\*\*\*big_calendar\*\*\*/${\big_calendar()}/g;
     $line =~ s/\*\*\*home\*\*\*/<a href="$url">Home<\/a>/g;
@@ -1375,6 +1377,7 @@ RELOOP:    while ($line =~ s/\*\*\*regex\s+(.*?)\s+(s(.)(?:.*?)\2(?<!\\)(?:.*?)\
         $line =~ s/\*\*\*link_rel\*\*\*/${\link_rel($i)}/g;
     $line =~ s/\*\*\*afversion\*\*\*/$afversion/g;
     $line =~ s/\*\*\*(?:comics|comic)_from\s+(.*?)\*\*\*/${\todays_comics($1)}/g;
+    $line =~ s/\*\*\*og_images\*\*\*/${\og_images($fulldate)}/g;
 
     # This needs to be above includenoparse and below everything else.
     foreach (@regpost) {
@@ -2113,3 +2116,16 @@ sub fetch_include {
 
     return "HEY!  fetch_include() exploded!";
 }
+
+sub og_images {
+    my $fulldate = shift;
+    my $headers;
+    foreach (@{$strips{"$fulldate"}}) {
+        unless(/(txt|htm|html)$/) {
+            $headers .= qq(<meta property="og:image" content="$url$comicsdir$_" />\n);
+        }
+    }
+
+    return $headers;
+}
+
