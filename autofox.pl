@@ -24,7 +24,7 @@ use Digest::SHA;
 use HTML::Entities ();
 #use local::lib;
 
-my $afversion = "AutoFox 2.5.7.1";
+my $afversion = "AutoFox 2.5.7.2";
 
 #=======================================================================
 # Why am I counting from 1? Because it simplifies things when dealing
@@ -914,12 +914,13 @@ sub storylinefull {
 
 #=======================================================================
 # Pulls in filenames from $comicsdir and loads them into various hashes
-# for use later on (in the case of .tag and .cap files, it actually
-# opens the files and reads in the contents). -Teg
+# for use later on (in the case of .tag, .cap, and .alt files, it
+# actually opens the files and reads in the contents). -Teg
 
 my %dayhasstrip;
 my %monthhasstrip;
 my %captions;
+my %alts;
 
 while (my $nextname = <$sitedir$comicsdir*>) {
     $nextname =~ s/.*\///;
@@ -928,7 +929,7 @@ while (my $nextname = <$sitedir$comicsdir*>) {
         $dayhasstrip{$2}[$3][$4] = 1;
         $monthhasstrip{$2}{$3} = 1;
     } elsif ($nextname =~ /((\d\d\d\d)(\d\d)(\d\d)).*\.(tag|cap)$/i) {
-        open (CAPFILE, "$sitedir$comicsdir$nextname") or die "big problemski: $!";
+        open (CAPFILE, "$sitedir$comicsdir$nextname") or die "Can't open caption file $sitedir$comicsdir$nextname: $!";
         my $caption = join '', <CAPFILE>;
         $caption =~ s/^\s+|\s+$//g;
         close CAPFILE;
@@ -943,13 +944,32 @@ while (my $nextname = <$sitedir$comicsdir*>) {
             aflog("WARNING: More than one entry in captions list for $filename !! Later entries take precedence!");
         }
         $captions{$filename} = $caption;
+     } elsif ($nextname =~ /((\d\d\d\d)(\d\d)(\d\d)).*\.alt$/i) {
+         # Remember, alt-text is NOT the same as title text!
+        open (ALTFILE, "$sitedir$comicsdir$nextname") or die "Can't open alt-text file $sitedir$comicsdir$nextname: $!";
+        my $alts = join '', <ALTFILE>;
+        $alts =~ s/^\s+|\s+$//g;
+        close ALTFILE;
+        my ($filename) = ($nextname =~ /(^(.*)\.(?:gif|jpg|jpeg|png|bmp))/);
+
+        if($filename eq "") {
+            aflog("WARNING: Alt-text file $nextname does not appear to be associated with any file!");
+            next;
+        }
+
+        if (defined $alts{$filename}) {
+            aflog("WARNING: More than one entry in alt-text list for $filename !! Later entries take precedence!");
+        }
+        $alts{$filename} = $alts;
     } else {
         aflog("WARNING: Don't know how to handle $nextname, skipping...");
     }
 }
 
 #=======================================================================
-# Pulls in captions from captions.txt. -Teg
+# Pulls in captions from captions.txt.  I don't have a counterpart for
+# alt-texts; I'm just going with the per-file system there.
+# -Teg and/or Spam
 
 if (open (CAPTIONS, $captionsfile)) {
     foreach (<CAPTIONS>) {
@@ -1018,6 +1038,7 @@ sub getjsonstringforindex($) {
     my @imgs;
     my @footnotes;
     my %imgcaptions;
+    my %imgalts;
     my $digest = Digest::SHA->new("SHA-256");
 
     foreach (@{$strips{$currentday}}) {
@@ -1051,12 +1072,22 @@ sub getjsonstringforindex($) {
                     $digest->add($captions{$_});
                 }
             }
+
+            # BUT THAT'S NOT ALL!  How about alt-text?
+            if(exists($alts{$_})) {
+                # Same deal as with captions.
+                $imgalts{$_} = $alts{$_};
+                if($json_digest) {
+                    $digest->add($alts{$_});
+                }
+            }
         }
     }
 
     $comicdata{imgs} = \@imgs;
     $comicdata{footnotes} = \@footnotes;
     $comicdata{captions} = \%imgcaptions;
+    $comicdata{alts} = \%imgalts;
 
     # Only use the digest if it's enabled.  Hashing up an archive's worth of
     # files might take some time, of course.
@@ -1476,7 +1507,8 @@ sub todays_comics {
         } else {
             my $ci = $_;
             my $caption = defined $captions{$ci} ? HTML::Entities::encode($captions{$ci}) : "";
-            $comics .= qq(<img src="$url$comicsdir$_" title="$caption" class="comicimage" />\n<br />\n);
+            my $alt = defined $alts{$ci} ? HTML::Entities::encode($alts{$ci}) : "";
+            $comics .= qq(<img src="$url$comicsdir$_" alt="$alt" title="$caption" class="comicimage" />\n<br />\n);
         }
     }
     $comics =~ s/\<br\>\n$//;
@@ -1498,7 +1530,8 @@ sub todays_comics_rss {
         } else {
             my $ci = $_;
             my $caption = defined $captions{$ci} ? HTML::Entities::encode($captions{$ci}) : "";
-            $comics .= qq(<img src="$url$comicsdir$_" title="$caption"><br />);
+            my $alt = defined $alts{$ci} ? HTML::Entities::encode($alts{$ci}) : "";
+            $comics .= qq(<img src="$url$comicsdir$_" alt="$alt" title="$caption"><br />);
         }
     }
     return $comics;
