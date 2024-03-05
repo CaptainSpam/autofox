@@ -21,9 +21,10 @@ use File::Copy;
 use POSIX;
 use JSON;
 use Digest::SHA;
+use HTML::Entities ();
 #use local::lib;
 
-my $afversion = "AutoFox 2.5.7-og";
+my $afversion = "AutoFox 2.5.7.1";
 
 #=======================================================================
 # Why am I counting from 1? Because it simplifies things when dealing
@@ -990,6 +991,7 @@ sub getjsonstringforindex($) {
     my $firstday = $daylist[0];
     my $lastday = $daylist[$#daylist];
     (my $year, my $month, my $day) = ($currentday =~ /(\d{4})(\d{2})(\d{2})/);
+    # FIXME: That's not how the %captions hash works.  Do better!
     my $caption = defined $captions{$currentday} ? $captions{$currentday} : "";
 
     my $news = "";
@@ -1456,8 +1458,8 @@ sub todays_comics {
             close TEXTFILE;
         } else {
             my $ci = $_;
-            my $caption = defined $captions{$ci} ? $captions{$ci} : "";
-            $comics .= qq(<img src="$url$comicsdir$_" alt="$caption" title="$caption" class="comicimage" />\n<br />\n);
+            my $caption = defined $captions{$ci} ? HTML::Entities::encode($captions{$ci}) : "";
+            $comics .= qq(<img src="$url$comicsdir$_" title="$caption" class="comicimage" />\n<br />\n);
         }
     }
     $comics =~ s/\<br\>\n$//;
@@ -1478,8 +1480,8 @@ sub todays_comics_rss {
             $comics .= convert_relative_attributes($temptext);
         } else {
             my $ci = $_;
-            my $caption = defined $captions{$ci} ? $captions{$ci} : "";
-            $comics .= qq(<img src="$url$comicsdir$_" alt="$caption" title="$caption"><br />);
+            my $caption = defined $captions{$ci} ? HTML::Entities::encode($captions{$ci}) : "";
+            $comics .= qq(<img src="$url$comicsdir$_" title="$caption"><br />);
         }
     }
     return $comics;
