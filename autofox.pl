@@ -930,6 +930,7 @@ while (my $nextname = <$sitedir$comicsdir*>) {
     } elsif ($nextname =~ /((\d\d\d\d)(\d\d)(\d\d)).*\.(tag|cap)$/i) {
         open (CAPFILE, "$sitedir$comicsdir$nextname") or die "big problemski: $!";
         my $caption = join '', <CAPFILE>;
+        $caption =~ s/^\s+|\s+$//g;
         close CAPFILE;
         my ($filename) = ($nextname =~ /(^(.*)\.(?:gif|jpg|jpeg|png|bmp))/);
 
@@ -957,6 +958,8 @@ if (open (CAPTIONS, $captionsfile)) {
         if (defined $captions{$filename}) {
             aflog("WARNING: More than one caption for $filename !! Later entries take precedence!");
         }
+
+        $caption =~ s/^\s+|\s+$//g;
         $captions{$filename} = $caption;
     }
     close CAPTIONS;
@@ -991,8 +994,6 @@ sub getjsonstringforindex($) {
     my $firstday = $daylist[0];
     my $lastday = $daylist[$#daylist];
     (my $year, my $month, my $day) = ($currentday =~ /(\d{4})(\d{2})(\d{2})/);
-    # FIXME: That's not how the %captions hash works.  Do better!
-    my $caption = defined $captions{$currentday} ? $captions{$currentday} : "";
 
     my $news = "";
     if(open NEWS, "$workdir$datadir/news/$currentday.html" or open NEWS, "$workdir$datadir/news/$currentday.txt") {
@@ -1011,12 +1012,12 @@ sub getjsonstringforindex($) {
     $comicdata{year} = $year;
     $comicdata{month} = $month;
     $comicdata{day} = $day;
-    $comicdata{caption} = $caption;
     $comicdata{news} = $news;
     $comicdata{url} = "$url$dailydir$currentday.html";
 
     my @imgs;
     my @footnotes;
+    my %imgcaptions;
     my $digest = Digest::SHA->new("SHA-256");
 
     foreach (@{$strips{$currentday}}) {
@@ -1035,11 +1036,27 @@ sub getjsonstringforindex($) {
             if($json_digest) {
                 $digest->addfile("$sitedir$comicsdir/$_");
             }
+
+            # But wait, there's more!  Maybe there's also a caption for this
+            # image?
+            if(exists($captions{$_})) {
+                # If so, we can add it in to a hash.  Said hash's keys are image
+                # filenames, as each caption goes to a specific image, not a
+                # date.  We don't HTML-escape it; whatever's consuming this can
+                # decide if that's what they want.
+                $imgcaptions{$_} = $captions{$_};
+
+                # Also, toss it into the digest, why not.
+                if($json_digest) {
+                    $digest->add($captions{$_});
+                }
+            }
         }
     }
 
     $comicdata{imgs} = \@imgs;
     $comicdata{footnotes} = \@footnotes;
+    $comicdata{captions} = \%imgcaptions;
 
     # Only use the digest if it's enabled.  Hashing up an archive's worth of
     # files might take some time, of course.
