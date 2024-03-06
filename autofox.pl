@@ -3,7 +3,7 @@
 # AutoFox 2.5
 
 # Copyright (c) 2003-2008 Nicholas "Tegeran" Knight <nknight@runawaynet.com>
-# Copyright (c) 2003-2022 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
+# Copyright (c) 2003-2024 Nicholas "CaptainSpam" Killewald <captainspam@exclaimindustries.net>
 # See "LICENSE" file at the toplevel for your daily dose of 3-clause BSD.
 
 # This is 2000-ish lines of semi-(readable|maintainable) Perl. It ain't pretty,
@@ -1036,9 +1036,8 @@ sub getjsonstringforindex($) {
     $comicdata{url} = "$url$dailydir$currentday.html";
 
     my @imgs;
+    my @imgsmetadata;
     my @footnotes;
-    my %imgcaptions;
-    my %imgalts;
     my $digest = Digest::SHA->new("SHA-256");
 
     foreach (@{$strips{$currentday}}) {
@@ -1054,6 +1053,10 @@ sub getjsonstringforindex($) {
         } else {
             # Images are added as URLs.
             push(@imgs, "$url$comicsdir$_");
+
+            my %imgmetadata;
+            $imgmetadata{'url'} = "$url$comicsdir$_";
+
             if($json_digest) {
                 $digest->addfile("$sitedir$comicsdir/$_");
             }
@@ -1065,7 +1068,7 @@ sub getjsonstringforindex($) {
                 # filenames, as each caption goes to a specific image, not a
                 # date.  We don't HTML-escape it; whatever's consuming this can
                 # decide if that's what they want.
-                $imgcaptions{$_} = $captions{$_};
+                $imgmetadata{'caption'} = $captions{$_};
 
                 # Also, toss it into the digest, why not.
                 if($json_digest) {
@@ -1076,18 +1079,19 @@ sub getjsonstringforindex($) {
             # BUT THAT'S NOT ALL!  How about alt-text?
             if(exists($alts{$_})) {
                 # Same deal as with captions.
-                $imgalts{$_} = $alts{$_};
+                $imgmetadata{'alt'} = $alts{$_};
                 if($json_digest) {
                     $digest->add($alts{$_});
                 }
             }
+
+            push(@imgsmetadata, \%imgmetadata);
         }
     }
 
     $comicdata{imgs} = \@imgs;
+    $comicdata{imgsmetadata} = \@imgsmetadata;
     $comicdata{footnotes} = \@footnotes;
-    $comicdata{captions} = \%imgcaptions;
-    $comicdata{alts} = \%imgalts;
 
     # Only use the digest if it's enabled.  Hashing up an archive's worth of
     # files might take some time, of course.
